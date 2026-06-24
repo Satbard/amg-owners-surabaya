@@ -4,6 +4,8 @@ services:
     container_name: amg-laravel-app
     restart: unless-stopped
     working_dir: /var/www
+    ports:
+      - "9000:9000"
     volumes:
       - ./:/var/www
     depends_on:
