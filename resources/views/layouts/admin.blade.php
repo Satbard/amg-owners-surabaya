@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Panel</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0f0f0f;
+            color: white;
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+
+            width: 260px;
+
+            background: #111;
+
+            border-right: 1px solid #222;
+
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+
+            color: #00e5ff;
+
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+
+            display: block;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px;
+
+            margin-bottom: 8px;
+
+            border-radius: 8px;
+        }
+
+        .sidebar a:hover {
+
+            background: #1d1d1d;
+        }
+
+        .content {
+
+            flex: 1;
+
+            padding: 30px;
+        }
+
+        .card {
+
+            background: #161616;
+
+            border: 1px solid #222;
+
+            border-radius: 14px;
+
+            padding: 20px;
+        }
+
+        .logout-btn {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            background: #ff4d4d;
+
+            color: white;
+        }
+
+        @media(max-width:768px) {
+
+            .wrapper {
+
+                flex-direction: column;
+            }
+
+            .sidebar {
+
+                width: 100%;
+            }
+        }
+    </style>
+
+</head>
+
+@stack('scripts')
+
+<body>
+
+    <div class="wrapper">
+
+        <aside class="sidebar">
+
+            <h2>
+                AMG Admin
+            </h2>
+
+            <a href="/admin">
+                Dashboard
+            </a>
+
+            <a href="/admin/registrations">
+                Registrations
+            </a>
+
+            <a href="/admin/registrations-trash">
+                Trash Bin
+            </a>
+
+            <a href="/admin/activity-logs">
+                Activity Logs
+            </a>
+
+            <a href="/admin/content">
+                Homepage CMS
+            </a>
+
+            <br>
+
+            <form method="POST" action="/admin/logout">
+
+                @csrf
+
+                <button class="logout-btn" type="submit">
+                    Logout
+                </button>
+
+            </form>
+
+        </aside>
+
+        <main class="content">
+
+            @yield('content')
+
+        </main>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+    @stack('scripts')
+
+</body>
+
+</html>

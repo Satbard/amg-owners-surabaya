@@ -1,0 +1,225 @@
+@extends('layouts.admin')
+
+@section('content')
+
+<div
+    style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:20px;
+    "
+>
+
+    <h1>Detail Pendaftaran</h1>
+
+    <a
+        href="/admin/registrations"
+        style="
+            padding:10px 16px;
+            background:#333;
+            color:white;
+            border-radius:8px;
+        "
+    >
+        ← Kembali
+    </a>
+
+</div>
+
+<div
+    style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:20px;
+    "
+>
+
+    <div class="card">
+
+        <h2
+            style="
+                color:#00e5ff;
+                margin-bottom:20px;
+            "
+        >
+            Data Diri
+        </h2>
+
+        <p><strong>Nama Lengkap:</strong><br>
+            {{ $registration->full_name }}
+        </p>
+
+        <br>
+
+        <p><strong>Nama Panggilan:</strong><br>
+            {{ $registration->nickname }}
+        </p>
+
+        <br>
+
+        <p><strong>Tempat Lahir:</strong><br>
+            {{ $registration->birth_place }}
+        </p>
+
+        <br>
+
+        <p><strong>Tanggal Lahir:</strong><br>
+            {{ $registration->birth_date }}
+        </p>
+
+        <br>
+
+        <p><strong>Alamat:</strong><br>
+            {{ $registration->address }}
+        </p>
+
+        <br>
+
+        <p><strong>No HP / WhatsApp:</strong><br>
+            {{ $registration->phone }}
+        </p>
+
+        <br>
+
+        <p><strong>Email:</strong><br>
+            {{ $registration->email ?: '-' }}
+        </p>
+
+        <br>
+
+        <p><strong>Instagram:</strong><br>
+            {{ $registration->instagram ?: '-' }}
+        </p>
+
+        <br>
+
+        <p><strong>Pekerjaan:</strong><br>
+            {{ $registration->occupation }}
+        </p>
+
+        <br>
+
+        <p><strong>Ukuran Kemeja / Kaos:</strong><br>
+            {{ $registration->shirt_size }}
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2
+            style="
+                color:#00e5ff;
+                margin-bottom:20px;
+            "
+        >
+            Data Kendaraan
+        </h2>
+
+        <p><strong>Model:</strong><br>
+            {{ $registration->vehicle_model }}
+        </p>
+
+        <br>
+
+        <p><strong>Tahun:</strong><br>
+            {{ $registration->vehicle_year }}
+        </p>
+
+        <br>
+
+        <p><strong>Warna:</strong><br>
+            {{ $registration->vehicle_color }}
+        </p>
+
+        <br>
+
+        <p><strong>Nomor Polisi:</strong><br>
+            {{ $registration->license_plate }}
+        </p>
+
+        <br><br>
+
+        <h2
+            style="
+                color:#00e5ff;
+                margin-bottom:15px;
+            "
+        >
+            Status Keanggotaan
+        </h2>
+
+        @if($registration->membership_status == 'Approved')
+
+            <span
+                style="
+                    background:#2e7d32;
+                    padding:10px 16px;
+                    border-radius:20px;
+                "
+            >
+                Approved
+            </span>
+
+        @elseif($registration->membership_status == 'Rejected')
+
+            <span
+                style="
+                    background:#c62828;
+                    padding:10px 16px;
+                    border-radius:20px;
+                "
+            >
+                Rejected
+            </span>
+
+        @else
+
+            <span
+                style="
+                    background:#f9a825;
+                    color:black;
+                    padding:10px 16px;
+                    border-radius:20px;
+                "
+            >
+                Pending
+            </span>
+
+        @endif
+
+        <br><br><br>
+
+        <a
+            href="/admin/registrations/{{ $registration->id }}/edit"
+            style="
+                display:inline-block;
+                padding:12px 20px;
+                background:#00e5ff;
+                color:black;
+                border-radius:8px;
+                font-weight:bold;
+            "
+        >
+            Edit Data
+        </a>
+
+    </div>
+
+</div>
+
+<style>
+
+@media(max-width:768px){
+
+    div[style*="grid-template-columns:1fr 1fr"]{
+
+        grid-template-columns:1fr !important;
+    }
+
+}
+
+</style>
+
+@endsection
