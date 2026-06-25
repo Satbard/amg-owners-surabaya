@@ -37,10 +37,4 @@ RUN ln -s ../storage/app/public public/storage
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
 
-# Copy and configure custom entrypoint to run migrations on startup
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 EXPOSE 80
-
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
