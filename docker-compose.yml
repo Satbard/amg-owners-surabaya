@@ -1,19 +1,16 @@
+version: "3.8"
+
 services:
   app:
     build: .
-    container_name: amg-laravel-app
     restart: unless-stopped
     ports:
-      - "8080:80"
-    command: >
-      sh -c "until php artisan migrate --force 2>/dev/null; do sleep 2; done && apache2-foreground"
+      - 8080:80
     depends_on:
-      db:
-        condition: service_started
+      - db
 
   db:
     image: mysql:8.0
-    container_name: amg-mysql
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: amg_owners
@@ -21,13 +18,9 @@ services:
       MYSQL_USER: amguser
       MYSQL_PASSWORD: amgpassword
     ports:
-      - "3306:3306"
+      - 3306:3306
     volumes:
       - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      timeout: 10s
-      retries: 10
 
 volumes:
   mysql_data:
