@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -14,6 +14,12 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql zip gd mbstring exif pcntl
 
+# Enable Apache mod_rewrite for Laravel URL routing
+RUN a2enmod rewrite
+
+# Copy custom Apache virtual host configuration
+COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
@@ -25,6 +31,4 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
 
-EXPOSE 9000
-
-CMD ["php-fpm"]
+EXPOSE 80
