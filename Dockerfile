@@ -28,6 +28,12 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
+# Create .env file and generate APP_KEY
+RUN cp .env.docker .env && php artisan key:generate
+
+# Create storage symlink for public uploads
+RUN php artisan storage:link
+
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
 
