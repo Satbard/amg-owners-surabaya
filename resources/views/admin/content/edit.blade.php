@@ -1,36 +1,23 @@
 @extends('layouts.admin')
 
 @section('content')
-
-    <h1 style="
-        margin-bottom:20px;
-    ">
+    <h1 style="margin-bottom:20px;">
         Homepage CMS
     </h1>
 
     @if (session('success'))
-        <div class="card" style="
-        margin-bottom:20px;
-        border-left:4px solid #4caf50;
-    ">
+        <div class="card" style="margin-bottom:20px;border-left:4px solid #4caf50;">
             {{ session('success') }}
         </div>
     @endif
 
     @if ($errors->any())
-        <div class="card" style="
-        margin-bottom:20px;
-        border-left:4px solid #c62828;
-    ">
-
+        <div class="card" style="margin-bottom:20px;border-left:4px solid #c62828;">
             <ul>
-
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
-
             </ul>
-
         </div>
     @endif
 
@@ -46,29 +33,23 @@
         gap:20px;
     ">
 
-            <!-- LOGO -->
+            <!-- Logo Homepage -->
 
             <div class="card">
 
-                <h2 style="
-            color:#00e5ff;
-            margin-bottom:20px;
-        ">
-                    Logo Website
+                <h2 style="color:#00e5ff;margin-bottom:20px;">
+                    Logo Homepage
                 </h2>
 
                 @if ($content->logo)
-                    <div style="
-                text-align:center;
-                margin-bottom:20px;
-            ">
+                    <div style="text-align:center;margin-bottom:20px;">
 
                         <img src="{{ asset('storage/' . $content->logo) }}"
                             style="
-                    max-width:250px;
-                    max-height:150px;
-                    object-fit:contain;
-                ">
+                        max-width:220px;
+                        max-height:150px;
+                        object-fit:contain;
+                    ">
 
                     </div>
                 @endif
@@ -76,35 +57,62 @@
                 <input type="file" name="logo" class="form-input">
 
                 <small style="color:#aaa;">
-                    Upload logo website.
+                    Logo yang tampil di tengah Homepage.
                 </small>
 
             </div>
 
-            <!-- BACKGROUND HOMEPAGE -->
+
+
+            <!-- Logo Header -->
 
             <div class="card">
 
-                <h2 style="
-            color:#00e5ff;
-            margin-bottom:20px;
-        ">
+                <h2 style="color:#00e5ff;margin-bottom:20px;">
+                    Logo Header
+                </h2>
+
+                @if ($content->header_logo)
+                    <div style="text-align:center;margin-bottom:20px;">
+
+                        <img src="{{ asset('storage/' . $content->header_logo) }}"
+                            style="
+                        max-width:220px;
+                        max-height:80px;
+                        object-fit:contain;
+                    ">
+
+                    </div>
+                @endif
+
+                <input type="file" name="header_logo" class="form-input">
+
+                <small style="color:#aaa;">
+                    Logo yang tampil di kiri dan kanan Header Website.
+                </small>
+
+            </div>
+
+
+
+            <!-- Background Homepage -->
+
+            <div class="card">
+
+                <h2 style="color:#00e5ff;margin-bottom:20px;">
                     Background Homepage
                 </h2>
 
                 @if ($content->background)
-                    <div style="
-                text-align:center;
-                margin-bottom:20px;
-            ">
+                    <div style="text-align:center;margin-bottom:20px;">
 
                         <img src="{{ asset('storage/' . $content->background) }}"
                             style="
-                    width:100%;
-                    max-height:180px;
-                    object-fit:cover;
-                    border-radius:8px;
-                ">
+                        width:100%;
+                        max-height:180px;
+                        object-fit:cover;
+                        border-radius:8px;
+                    ">
 
                     </div>
                 @endif
@@ -112,35 +120,31 @@
                 <input type="file" name="background" class="form-input">
 
                 <small style="color:#aaa;">
-                    Upload background homepage.
+                    Background halaman Homepage.
                 </small>
 
             </div>
 
-            <!-- BACKGROUND REGISTER -->
+
+
+            <!-- Background Form -->
 
             <div class="card">
 
-                <h2 style="
-            color:#00e5ff;
-            margin-bottom:20px;
-        ">
+                <h2 style="color:#00e5ff;margin-bottom:20px;">
                     Background Form Pendaftaran
                 </h2>
 
                 @if ($content->registration_background)
-                    <div style="
-                text-align:center;
-                margin-bottom:20px;
-            ">
+                    <div style="text-align:center;margin-bottom:20px;">
 
                         <img src="{{ asset('storage/' . $content->registration_background) }}"
                             style="
-                    width:100%;
-                    max-height:180px;
-                    object-fit:cover;
-                    border-radius:8px;
-                ">
+                        width:100%;
+                        max-height:180px;
+                        object-fit:cover;
+                        border-radius:8px;
+                    ">
 
                     </div>
                 @endif
@@ -148,7 +152,7 @@
                 <input type="file" name="registration_background" class="form-input">
 
                 <small style="color:#aaa;">
-                    Upload background khusus halaman pendaftaran.
+                    Background khusus halaman Form Pendaftaran.
                 </small>
 
             </div>
@@ -159,18 +163,13 @@
 
         <div class="card">
 
-            <h2 style="
-        color:#00e5ff;
-        margin-bottom:20px;
-    ">
+            <h2 style="color:#00e5ff;margin-bottom:20px;">
                 Konten Homepage
             </h2>
 
             <div class="form-group">
 
-                <label>
-                    Judul Homepage
-                </label>
+                <label>Judul Homepage</label>
 
                 <input type="text" name="title" value="{{ old('title', $content->title) }}" class="form-input">
 
@@ -178,25 +177,20 @@
 
             <div class="form-group">
 
-                <label>
-                    Deskripsi Homepage
-                </label>
+                <label>Deskripsi Homepage</label>
 
-                <textarea name="description" class="form-input" style="min-height:150px;">{{ old('description', $content->description) }}</textarea>
+                <textarea name="description" class="form-input" style="min-height:160px;">{{ old('description', $content->description) }}</textarea>
 
             </div>
 
             <div class="form-group">
 
-                <label>
-                    Tulisan Tombol Daftar
-                </label>
+                <label>Tulisan Tombol Daftar</label>
 
                 <input type="text" name="button_text" value="{{ old('button_text', $content->button_text) }}"
                     class="form-input">
 
             </div>
-
 
         </div>
 
@@ -204,17 +198,15 @@
 
         <button type="submit"
             style="
-padding:14px 24px;
-background:#00e5ff;
-color:black;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-">
-
+        padding:14px 28px;
+        background:#00e5ff;
+        color:black;
+        border:none;
+        border-radius:8px;
+        font-weight:bold;
+        cursor:pointer;
+    ">
             Simpan Perubahan
-
         </button>
 
     </form>
@@ -227,7 +219,7 @@ font-weight:bold;
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: bold;
         }
 
         .form-input {
@@ -252,6 +244,7 @@ font-weight:bold;
             outline: none;
 
             border-color: #00e5ff;
+
         }
 
         @media(max-width:768px) {
@@ -259,9 +252,9 @@ font-weight:bold;
             form>div:first-of-type {
 
                 grid-template-columns: 1fr !important;
+
             }
 
         }
     </style>
-
 @endsection

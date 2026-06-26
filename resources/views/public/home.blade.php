@@ -10,30 +10,79 @@
         align-items:center;
         text-align:center;
         padding:40px;
+        position:relative;
+        overflow:hidden;
 
-        @if ($content->background) background-image:url('{{ asset('storage/' . $content->background) }}');
+        @if ($content->background) background-image:
+                linear-gradient(
+                    rgba(0,0,0,.55),
+                    rgba(0,0,0,.55)
+                ),
+                url('{{ asset('storage/' . $content->background) }}');
+
             background-size:cover;
-            background-position:center; @endif
+
+            background-position:center;
+
+            background-repeat:no-repeat;
+
+            background-attachment:fixed;
+
+        @else
+
+            background:#111; @endif
     ">
 
-        <h1 style="
-            font-size:52px;
-            margin-bottom:20px;
+        <div style="
+            max-width:900px;
+            z-index:2;
         ">
-            {{ $content->title }}
-        </h1>
 
-        <p style="
-            max-width:800px;
-            font-size:20px;
-            margin-bottom:40px;
-        ">
-            {{ $content->description }}
-        </p>
+            <h1 class="homepage-title"
+                style="
+                margin-bottom:25px;
+                color:white;
+                text-shadow:
+                    0 3px 15px rgba(0,0,0,.6);
+            ">
+                {{ $content->title }}
+            </h1>
 
-        <a href="/register" class="btn-primary">
-            {{ $content->button_text }}
-        </a>
+            <p
+                style="
+                font-size:22px;
+                line-height:1.8;
+                color:#f5f5f5;
+                margin-bottom:45px;
+                text-shadow:
+                    0 2px 10px rgba(0,0,0,.6);
+            ">
+                {{ $content->description }}
+            </p>
+
+            <a href="/register" class="btn-primary"
+                style="
+                font-size:18px;
+                padding:16px 36px;
+            ">
+                {{ $content->button_text }}
+            </a>
+
+        </div>
 
     </div>
+
+    <style>
+        @media (max-width:768px) {
+
+            .homepage-title {
+
+                font-size: 38px !important;
+
+                line-height: 1.2;
+
+            }
+
+        }
+    </style>
 @endsection

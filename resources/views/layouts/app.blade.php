@@ -14,21 +14,78 @@
     @endphp
 
     <style>
+        /* ==========================================
+           FONT
+        ========================================== */
+
+        @font-face {
+
+            font-family: 'NunitoSans';
+
+            src: url('/fonts/NunitoSans/NunitoSans_10pt-Black.ttf') format('truetype');
+
+            font-weight: 900;
+
+            font-style: normal;
+
+        }
+
+        @font-face {
+
+            font-family: 'NunitoExpanded';
+
+            src: url('/fonts/NunitoSans/NunitoSans_10pt_Expanded-Black.ttf') format('truetype');
+
+            font-weight: 900;
+
+            font-style: normal;
+
+        }
+
+        /* ==========================================
+           RESET
+        ========================================== */
+
         * {
 
             margin: 0;
+
             padding: 0;
+
             box-sizing: border-box;
 
         }
 
         body {
 
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'NunitoSans', sans-serif;
 
             background: #0a0a0a;
 
             color: #f9f9f9;
+
+            overflow-x: hidden;
+
+        }
+
+        input,
+        textarea,
+        select,
+        button,
+        a,
+        label,
+        span,
+        p,
+        li,
+        td,
+        th,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+
+            font-family: 'NunitoSans', sans-serif;
 
         }
 
@@ -38,9 +95,27 @@
 
         }
 
-        /* ==========================
-            HEADER
-        ========================== */
+        /* ==========================================
+           HOMEPAGE TITLE
+        ========================================== */
+
+        .homepage-title {
+
+            font-family: 'NunitoExpanded', sans-serif;
+
+            font-size: 60px;
+
+            font-weight: 900;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+        }
+
+        /* ==========================================
+           HEADER
+        ========================================== */
 
         .navbar {
 
@@ -52,7 +127,9 @@
 
             height: 85px;
 
-            background: #111;
+            background: rgba(17, 17, 17, .95);
+
+            backdrop-filter: blur(12px);
 
             border-bottom: 1px solid #222;
 
@@ -100,9 +177,9 @@
 
         }
 
-        /* ==========================
-            LOGO
-        ========================== */
+        /* ==========================================
+           LOGO
+        ========================================== */
 
         .header-logo {
 
@@ -112,13 +189,23 @@
 
             width: auto;
 
+            height: auto;
+
             object-fit: contain;
+
+            transition: .3s;
 
         }
 
-        /* ==========================
-            MENU
-        ========================== */
+        .header-logo:hover {
+
+            transform: scale(1.05);
+
+        }
+
+        /* ==========================================
+           MENU
+        ========================================== */
 
         .menu {
 
@@ -134,7 +221,29 @@
 
             font-size: 16px;
 
-            font-weight: bold;
+            font-weight: 900;
+
+            transition: .3s;
+
+            position: relative;
+
+        }
+
+        .menu a::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            bottom: -6px;
+
+            width: 0;
+
+            height: 2px;
+
+            background: #00e5ff;
 
             transition: .3s;
 
@@ -146,9 +255,15 @@
 
         }
 
-        /* ==========================
-            CONTENT
-        ========================== */
+        .menu a:hover::after {
+
+            width: 100%;
+
+        }
+
+        /* ==========================================
+           CONTENT
+        ========================================== */
 
         .container {
 
@@ -158,9 +273,9 @@
 
         }
 
-        /* ==========================
-            BUTTON
-        ========================== */
+        /* ==========================================
+           BUTTON
+        ========================================== */
 
         .btn-primary {
 
@@ -174,7 +289,7 @@
 
             color: black;
 
-            font-weight: bold;
+            font-weight: 900;
 
             transition: .3s;
 
@@ -184,11 +299,13 @@
 
             opacity: .9;
 
+            transform: translateY(-2px);
+
         }
 
-        /* ==========================
-            FOOTER
-        ========================== */
+        /* ==========================================
+           FOOTER
+        ========================================== */
 
         .footer {
 
@@ -204,13 +321,15 @@
 
             color: #ccc;
 
+            font-size: 14px;
+
         }
 
-        /* ==========================
-            RESPONSIVE
-        ========================== */
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
 
-        @media(max-width:768px) {
+        @media (max-width:768px) {
 
             .navbar {
 
@@ -248,6 +367,14 @@
 
             }
 
+            .homepage-title {
+
+                font-size: 36px;
+
+                letter-spacing: 1px;
+
+            }
+
         }
     </style>
 
@@ -258,7 +385,6 @@
     <nav class="navbar">
 
         <!-- Logo Kiri -->
-
         <div class="navbar-left">
 
             @if ($content && $content->logo)
@@ -268,33 +394,23 @@
         </div>
 
         <!-- Menu -->
-
         <div class="navbar-center">
 
             <div class="menu">
 
-                <a href="/">
+                <a href="/">Home</a>
 
-                    Home
-
-                </a>
-
-                <a href="/register">
-
-                    Pendaftaran
-
-                </a>
+                <a href="/register">Pendaftaran</a>
 
             </div>
 
         </div>
 
         <!-- Logo Kanan -->
-
         <div class="navbar-right">
 
             @if ($content && $content->header_logo)
-                <img src="{{ asset('storage/' . $content->header_logo) }}" class="header-logo" alt="Header Logo">
+                <img src="{{ asset('storage/' . $content->header_logo) }}" class="header-logo" alt="Partner Logo">
             @endif
 
         </div>
@@ -309,17 +425,12 @@
 
     <footer class="footer">
 
-        <strong>AMG Owners Surabaya</strong>
-
-        <br>
-
-        Jl. Demak No.166-168, Gundih, Kec. Bubutan,
-        Surabaya, Jawa Timur 60172
+        © {{ date('Y') }} AMG Owners Surabaya. All Rights Reserved.
 
         <br><br>
 
-        © {{ date('Y') }} AMG Owners Surabaya.
-        All Rights Reserved.
+        Jl. Demak No.166-168, Gundih, Kec. Bubutan,
+        Surabaya, Jawa Timur 60172
 
     </footer>
 
