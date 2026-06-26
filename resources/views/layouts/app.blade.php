@@ -22,7 +22,7 @@
 
             font-family: 'NunitoSans';
 
-            src: url('/fonts/NunitoSans/NunitoSans_10pt-Black.ttf') format('truetype');
+            src: url('/fonts/NunitoSans/NunitoSans_10pt-Medium.ttf') format('truetype');
 
             font-weight: 900;
 
