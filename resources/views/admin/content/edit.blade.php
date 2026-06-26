@@ -57,7 +57,7 @@
                 <input type="file" name="logo" class="form-input">
 
                 <small style="color:#aaa;">
-                    Logo yang tampil di kiri Homepage.
+                    Logo yang tampil di kiri Header Website.
                 </small>
 
             </div>
