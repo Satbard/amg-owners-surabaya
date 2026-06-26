@@ -41,7 +41,7 @@ class RegistrationsExport implements FromCollection, WithHeadings
             'Pekerjaan',
             'Model Kendaraan',
             'Tahun',
-            'Warna',
+            'No. Rangka / VIN',
             'Plat',
             'Status',
             'Tanggal Daftar'

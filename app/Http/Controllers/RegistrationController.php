@@ -10,26 +10,11 @@ class RegistrationController extends Controller
 {
     public function create()
     {
-        $vehicleModels = [
-            'A-Class',
-            'C-Class',
-            'CLA',
-            'CLS',
-            'E-Class',
-            'GLA',
-            'GLB',
-            'GLC',
-            'GLE',
-            'GLS',
-            'SL',
-            'AMG GT'
-        ];  
-
-        $content = HomepageContent::first();
+        $content = \App\Models\HomepageContent::first();
 
         return view(
             'public.register',
-            compact('vehicleModels', 'content')
+            compact('content')
         );
     }
 
@@ -123,7 +108,7 @@ class RegistrationController extends Controller
                     'Tahun kendaraan tidak boleh melebihi tahun saat ini.',
 
                 'vehicle_color.required' =>
-                    'Warna kendaraan wajib diisi.',
+                    'Nomor rangka / VIN wajib diisi',
 
                 'license_plate.required' =>
                     'Nomor polisi wajib diisi.',

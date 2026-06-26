@@ -194,28 +194,15 @@
 
                 <div style="display:grid;gap:15px;">
 
-                    <select name="vehicle_model"
+                    <input type="text" name="vehicle_model" placeholder="Model Kendaraan"
+                        value="{{ old('vehicle_model') }}"
                         class="form-input {{ $errors->has('vehicle_model') ? 'input-error' : '' }}">
 
-                        @error('vehicle_model')
-                            <div class="error-text">
-
-                                {{ $message }}
-
-                            </div>
-                        @enderror
-
-                        <option value="">
-                            Pilih Model Kendaraan
-                        </option>
-
-                        @foreach ($vehicleModels as $model)
-                            <option value="{{ $model }}" @selected(old('vehicle_model') == $model)>
-                                {{ $model }}
-                            </option>
-                        @endforeach
-
-                    </select>
+                    @error('vehicle_model')
+                        <div class="error-text">
+                            {{ $message }}
+                        </div>
+                    @enderror
 
                     <input type="number" name="vehicle_year" placeholder="Tahun Pembuatan"
                         value="{{ old('vehicle_year') }}"
@@ -229,7 +216,7 @@
                         </div>
                     @enderror
 
-                    <input type="text" name="vehicle_color" placeholder="Warna Kendaraan"
+                    <input type="text" name="vehicle_color" placeholder="Nomor Rangka / VIN"
                         value="{{ old('vehicle_color') }}"
                         class="form-input {{ $errors->has('vehicle_color') ? 'input-error' : '' }}">
 
