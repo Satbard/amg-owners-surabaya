@@ -20,6 +20,8 @@ class HomepageContent extends Model
 
         'button_text',
 
+        'header_logo',
+
         'updated_by'
     ];
 
