@@ -57,7 +57,7 @@
                 <input type="file" name="logo" class="form-input">
 
                 <small style="color:#aaa;">
-                    Logo yang tampil di tengah Homepage.
+                    Logo yang tampil di kiri Homepage.
                 </small>
 
             </div>
@@ -88,7 +88,7 @@
                 <input type="file" name="header_logo" class="form-input">
 
                 <small style="color:#aaa;">
-                    Logo yang tampil di kiri dan kanan Header Website.
+                    Logo yang tampil di kanan Header Website.
                 </small>
 
             </div>
