@@ -50,7 +50,7 @@
 
             <p
                 style="
-                font-size:22px;
+                font-size:16px;
                 line-height:1.8;
                 color:#f5f5f5;
                 margin-bottom:45px;
