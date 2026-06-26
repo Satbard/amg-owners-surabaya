@@ -427,6 +427,8 @@
 
         © {{ date('Y') }} AMG Owners Surabaya. All Rights Reserved.
 
+        <br>
+
         Jl. Demak No.166-168, Gundih, Kec. Bubutan,
         Surabaya, Jawa Timur 60172
 
