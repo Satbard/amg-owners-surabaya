@@ -325,6 +325,60 @@
 
         }
 
+        .footer-partner {
+
+            margin-bottom: 30px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+        .partner-title {
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+            color: #ffffff;
+
+        }
+
+        .footer-partner-logo {
+
+            max-width: 240px;
+
+            width: 100%;
+
+            max-height: 90px;
+
+            object-fit: contain;
+
+        }
+
+        .footer-copy {
+
+            margin-bottom: 12px;
+
+            line-height: 30px;
+
+        }
+
+        .footer-address {
+
+            color: #bdbdbd;
+
+            line-height: 28px;
+
+        }
+
         /* ==========================================
            RESPONSIVE
         ========================================== */
@@ -409,10 +463,6 @@
         <!-- Logo Kanan -->
         <div class="navbar-right">
 
-            @if ($content && $content->header_logo)
-                <img src="{{ asset('storage/' . $content->header_logo) }}" class="header-logo" alt="Partner Logo">
-            @endif
-
         </div>
 
     </nav>
@@ -425,12 +475,39 @@
 
     <footer class="footer">
 
-        © {{ date('Y') }} AMG Owners Surabaya. All Rights Reserved.
+        @if ($content && $content->header_logo)
+            <div class="footer-partner">
 
-        <br>
+                <div class="partner-title">
 
-        Jl. Demak No.166-168, Gundih, Kec. Bubutan,
-        Surabaya, Jawa Timur 60172
+                    Supporting Partner:
+
+                </div>
+
+                <img src="{{ asset('storage/' . $content->header_logo) }}" class="footer-partner-logo"
+                    alt="Supporting Partner">
+
+            </div>
+        @endif
+
+        <div class="footer-copy">
+
+            © {{ date('Y') }} AMG Owners Surabaya.
+
+            <br>
+
+            All Rights Reserved.
+
+        </div>
+
+        <div class="footer-address">
+
+            Jl. Demak No.166-168, Gundih,
+            Kec. Bubutan,
+            Surabaya,
+            Jawa Timur 60172
+
+        </div>
 
     </footer>
 
