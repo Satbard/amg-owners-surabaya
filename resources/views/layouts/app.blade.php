@@ -383,6 +383,22 @@
            RESPONSIVE
         ========================================== */
 
+        /* ==========================================
+           Desktop & Mobile Partner Logo
+        ========================================== */
+
+        .desktop-partner-logo {
+
+            display: block;
+
+        }
+
+        .mobile-partner {
+
+            display: none;
+
+        }
+
         @media (max-width:768px) {
 
             .navbar {
@@ -429,6 +445,28 @@
 
             }
 
+            /* =====================================
+               Desktop partner logo disembunyikan
+            ===================================== */
+
+            .desktop-partner-logo {
+
+                display: none;
+
+            }
+
+            /* =====================================
+               Supporting Partner ditampilkan
+            ===================================== */
+
+            .mobile-partner {
+
+                display: block;
+
+                margin-bottom: 15px;
+
+            }
+
         }
     </style>
 
@@ -463,6 +501,11 @@
         <!-- Logo Kanan -->
         <div class="navbar-right">
 
+            @if ($content && $content->header_logo)
+                <img src="{{ asset('storage/' . $content->header_logo) }}" class="header-logo desktop-partner-logo"
+                    alt="Supporting Partner Logo">
+            @endif
+
         </div>
 
     </nav>
@@ -475,20 +518,24 @@
 
     <footer class="footer">
 
-        @if ($content && $content->header_logo)
-            <div class="footer-partner">
+        <div class="mobile-partner">
 
-                <div class="partner-title">
+            @if ($content && $content->header_logo)
+                <div class="footer-partner">
 
-                    Supporting Partner:
+                    <div class="partner-title">
+
+                        Supporting Partner:
+
+                    </div>
+
+                    <img src="{{ asset('storage/' . $content->header_logo) }}" class="footer-partner-logo"
+                        alt="Supporting Partner">
 
                 </div>
+            @endif
 
-                <img src="{{ asset('storage/' . $content->header_logo) }}" class="footer-partner-logo"
-                    alt="Supporting Partner">
-
-            </div>
-        @endif
+        </div>
 
         <div class="footer-copy">
 
