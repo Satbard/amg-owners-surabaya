@@ -309,7 +309,7 @@
 
         .footer {
 
-            padding: 30px;
+            padding: 20px 30px;
 
             background: #111;
 
@@ -327,7 +327,7 @@
 
         .footer-partner {
 
-            margin-bottom: 30px;
+            margin-bottom: 15px;
 
             display: flex;
 
@@ -341,11 +341,11 @@
 
         .partner-title {
 
-            font-size: 16px;
+            font-size: 15px;
 
             font-weight: 700;
 
-            margin-bottom: 15px;
+            margin-bottom: 8px;
 
             color: #ffffff;
 
@@ -365,9 +365,9 @@
 
         .footer-copy {
 
-            margin-bottom: 12px;
+            margin-bottom: 6px;
 
-            line-height: 30px;
+            line-height: 1.4;
 
         }
 
@@ -375,7 +375,7 @@
 
             color: #bdbdbd;
 
-            line-height: 28px;
+            line-height: 1.4;
 
         }
 
@@ -491,14 +491,18 @@
         @endif
 
         <div class="footer-copy">
+
             © {{ date('Y') }} AMG Owners Surabaya. All Rights Reserved.
+
         </div>
 
         <div class="footer-address">
+
             Jl. Demak No.166-168, Gundih,
             Kec. Bubutan,
             Surabaya,
             Jawa Timur 60172
+
         </div>
 
     </footer>
