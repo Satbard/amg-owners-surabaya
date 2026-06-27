@@ -32,7 +32,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN cp .env.docker .env && php -r "file_put_contents('.env', str_replace('APP_KEY=', 'APP_KEY=base64:' . base64_encode(random_bytes(32)), file_get_contents('.env')));"
 
 # Create storage symlink for public uploads
-RUN php artisan storage:link
+RUN ln -s /var/www/storage/app/public /var/www/public/storage
 
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
