@@ -13,6 +13,7 @@ services:
 
     volumes:
       - laravel_storage:/var/www/storage
+      - laravel_uploads:/var/www/storage/app/public
 
   db:
     image: mysql:8.0
