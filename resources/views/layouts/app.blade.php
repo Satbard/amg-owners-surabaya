@@ -492,11 +492,7 @@
 
         <div class="footer-copy">
 
-            © {{ date('Y') }} AMG Owners Surabaya.
-
-            <br>
-
-            All Rights Reserved.
+            © {{ date('Y') }} AMG Owners Surabaya. All Rights Reserved.
 
         </div>
 
