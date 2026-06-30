@@ -9,7 +9,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Admin Panel</title>
+    <title>AMG Admin Panel</title>
 
     <style>
         * {
@@ -47,6 +47,15 @@
             margin-bottom: 30px;
         }
 
+        .sidebar-label {
+            color: #666;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 0 8px 0;
+            padding-left: 12px;
+        }
+
         .sidebar a {
 
             display: block;
@@ -57,7 +66,7 @@
 
             padding: 12px;
 
-            margin-bottom: 8px;
+            margin-bottom: 4px;
 
             border-radius: 8px;
         }
@@ -65,6 +74,11 @@
         .sidebar a:hover {
 
             background: #1d1d1d;
+        }
+
+        .sidebar a.active {
+            background: #1d1d1d;
+            color: #00e5ff;
         }
 
         .content {
@@ -130,13 +144,27 @@
                 AMG Admin
             </h2>
 
+            <div class="sidebar-label">Utama</div>
+
             <a href="/admin">
                 Dashboard
             </a>
 
+            <div class="sidebar-label">Manajemen</div>
+
             <a href="/admin/registrations">
-                Registrations
+                Pendaftaran
             </a>
+
+            <a href="/admin/events">
+                Acara
+            </a>
+
+            <a href="/admin/scan">
+                Scan Barcode
+            </a>
+
+            <div class="sidebar-label">Lainnya</div>
 
             <a href="/admin/registrations-trash">
                 Trash Bin

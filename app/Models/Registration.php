@@ -11,6 +11,8 @@ class Registration extends Model
 
     protected $fillable = [
 
+        'member_number',
+
         'full_name',
         'nickname',
 
@@ -33,6 +35,16 @@ class Registration extends Model
         'vehicle_color',
         'license_plate',
 
-        'membership_status'
+        'membership_status',
     ];
+
+    public static function generateMemberNumber($id)
+    {
+        return 'AMG'.str_pad($id, 5, '0', STR_PAD_LEFT);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(EventAttendance::class);
+    }
 }

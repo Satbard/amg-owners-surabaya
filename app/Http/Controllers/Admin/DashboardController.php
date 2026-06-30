@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use App\Models\Registration;
 
 class DashboardController extends Controller
@@ -28,6 +29,13 @@ class DashboardController extends Controller
                 'Rejected'
             )->count(),
 
+            'totalEvents' => Event::count(),
+
+            'upcomingEvents' => Event::whereIn('status', [
+                'upcoming', 'ongoing',
+            ])->count(),
+
+            'latestEvents' => Event::latest()->limit(5)->get(),
         ]);
     }
 }

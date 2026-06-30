@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\RegistrationsExport;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
+use App\Models\Event;
+use App\Models\EventAttendance;
 use App\Models\Registration;
 use Illuminate\Http\Request;
-use App\Exports\RegistrationsExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class RegistrationController extends Controller
@@ -38,7 +41,7 @@ class RegistrationController extends Controller
     }
 
     public function show(Registration $registration)
-    {   
+    {
         return view(
             'admin.registrations.show',
             compact('registration')
@@ -59,7 +62,7 @@ class RegistrationController extends Controller
             'GLE',
             'GLS',
             'SL',
-            'AMG GT'
+            'AMG GT',
         ];
 
         return view(
@@ -74,8 +77,7 @@ class RegistrationController extends Controller
     public function update(
         Request $request,
         Registration $registration
-    )
-    {
+    ) {
         $validated = $request->validate([
 
             'full_name' => 'required|max:255',
@@ -104,17 +106,43 @@ class RegistrationController extends Controller
 
             'license_plate' => 'required',
 
-            'membership_status' => 'required'
+            'membership_status' => 'required',
         ]);
 
         $registration->update($validated);
 
-        \App\Models\ActivityLog::create([
+        // Generate member_number and auto-add to active events when approved
+        if (
+            $validated['membership_status'] === 'Approved' &&
+            ! $registration->member_number
+        ) {
+            $registration->member_number =
+                Registration::generateMemberNumber(
+                    $registration->id
+                );
+            $registration->save();
+
+            // Auto-add to all active events
+            $activeEvents = Event::whereIn(
+                'status',
+                ['upcoming', 'ongoing']
+            )->get();
+
+            foreach ($activeEvents as $event) {
+                EventAttendance::firstOrCreate([
+                    'event_id' => $event->id,
+                    'registration_id' => $registration->id,
+                ], [
+                    'status' => 'tidak_hadir',
+                ]);
+            }
+        }
+
+        ActivityLog::create([
             'user_id' => auth()->id(),
-            'activity' =>
-                'Mengubah data pendaftaran ID ' .
+            'activity' => 'Mengubah data pendaftaran ID '.
                 $registration->id,
-            'ip_address' => $request->ip()
+            'ip_address' => $request->ip(),
         ]);
 
         return redirect(
@@ -127,16 +155,14 @@ class RegistrationController extends Controller
 
     public function destroy(
         Registration $registration
-    )
-    {
+    ) {
         $registration->delete();
 
-        \App\Models\ActivityLog::create([
+        ActivityLog::create([
             'user_id' => auth()->id(),
-            'activity' =>
-                'Menghapus pendaftaran ID ' .
+            'activity' => 'Menghapus pendaftaran ID '.
                 $registration->id,
-            'ip_address' => request()->ip()
+            'ip_address' => request()->ip(),
         ]);
 
         return redirect()
@@ -166,12 +192,11 @@ class RegistrationController extends Controller
 
         $registration->restore();
 
-        \App\Models\ActivityLog::create([
+        ActivityLog::create([
             'user_id' => auth()->id(),
-            'activity' =>
-                'Restore pendaftaran ID ' .
+            'activity' => 'Restore pendaftaran ID '.
                 $registration->id,
-            'ip_address' => request()->ip()
+            'ip_address' => request()->ip(),
         ]);
 
         return redirect()
@@ -189,12 +214,11 @@ class RegistrationController extends Controller
 
         $registration->forceDelete();
 
-        \App\Models\ActivityLog::create([
+        ActivityLog::create([
             'user_id' => auth()->id(),
-            'activity' =>
-                'Hapus permanen pendaftaran ID ' .
+            'activity' => 'Hapus permanen pendaftaran ID '.
                 $id,
-            'ip_address' => request()->ip()
+            'ip_address' => request()->ip(),
         ]);
 
         return redirect()

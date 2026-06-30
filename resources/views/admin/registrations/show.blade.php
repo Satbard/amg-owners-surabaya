@@ -17,6 +17,7 @@
             background:#333;
             color:white;
             border-radius:8px;
+            text-decoration:none;
         ">
             ← Kembali
         </a>
@@ -37,6 +38,21 @@
             ">
                 Data Diri
             </h2>
+
+            @if ($registration->member_number)
+                <p style="margin-bottom:15px;">
+                    <strong>Nomor Member:</strong><br>
+                    <span
+                        style="
+                        color:#00e5ff;
+                        font-size:20px;
+                        letter-spacing:2px;
+                        font-weight:bold;
+                    ">
+                        {{ $registration->member_number }}
+                    </span>
+                </p>
+            @endif
 
             <p><strong>Nama Lengkap:</strong><br>
                 {{ $registration->full_name }}
@@ -98,89 +114,140 @@
 
         </div>
 
-        <div class="card">
+        <div>
 
-            <h2 style="
-                color:#00e5ff;
-                margin-bottom:20px;
-            ">
-                Data Kendaraan
-            </h2>
+            <div class="card" style="margin-bottom:20px;">
 
-            <p><strong>Model Kendaraan:</strong><br>
-                {{ $registration->vehicle_model }}
-            </p>
-
-            <br>
-
-            <p><strong>Tahun:</strong><br>
-                {{ $registration->vehicle_year }}
-            </p>
-
-            <br>
-
-            <p><strong>No. Rangka / VIN:</strong><br>
-                {{ $registration->vehicle_color }}
-            </p>
-
-            <br>
-
-            <p><strong>Nomor Polisi:</strong><br>
-                {{ $registration->license_plate }}
-            </p>
-
-            <br><br>
-
-            <h2 style="
-                color:#00e5ff;
-                margin-bottom:15px;
-            ">
-                Status Keanggotaan
-            </h2>
-
-            @if ($registration->membership_status == 'Approved')
-                <span
-                    style="
-                    background:#2e7d32;
-                    padding:10px 16px;
-                    border-radius:20px;
+                <h2 style="
+                    color:#00e5ff;
+                    margin-bottom:20px;
                 ">
-                    Approved
-                </span>
-            @elseif($registration->membership_status == 'Rejected')
-                <span
-                    style="
-                    background:#c62828;
-                    padding:10px 16px;
-                    border-radius:20px;
+                    Data Kendaraan
+                </h2>
+
+                <p><strong>Model Kendaraan:</strong><br>
+                    {{ $registration->vehicle_model }}
+                </p>
+
+                <br>
+
+                <p><strong>Tahun:</strong><br>
+                    {{ $registration->vehicle_year }}
+                </p>
+
+                <br>
+
+                <p><strong>No. Rangka / VIN:</strong><br>
+                    {{ $registration->vehicle_color }}
+                </p>
+
+                <br>
+
+                <p><strong>Nomor Polisi:</strong><br>
+                    {{ $registration->license_plate }}
+                </p>
+
+                <br><br>
+
+                <h2 style="
+                    color:#00e5ff;
+                    margin-bottom:15px;
                 ">
-                    Rejected
-                </span>
-            @else
-                <span
+                    Status Keanggotaan
+                </h2>
+
+                @if ($registration->membership_status == 'Approved')
+                    <span
+                        style="
+                        background:#2e7d32;
+                        padding:10px 16px;
+                        border-radius:20px;
+                    ">
+                        ✅ Approved
+                    </span>
+                @elseif($registration->membership_status == 'Rejected')
+                    <span
+                        style="
+                        background:#c62828;
+                        padding:10px 16px;
+                        border-radius:20px;
+                    ">
+                        ❌ Rejected
+                    </span>
+                @else
+                    <span
+                        style="
+                        background:#f9a825;
+                        color:black;
+                        padding:10px 16px;
+                        border-radius:20px;
+                    ">
+                        ⏳ Pending
+                    </span>
+                @endif
+
+                <br><br><br>
+
+                <a href="/admin/registrations/{{ $registration->id }}/edit"
                     style="
-                    background:#f9a825;
+                    display:inline-block;
+                    padding:12px 20px;
+                    background:#00e5ff;
                     color:black;
-                    padding:10px 16px;
-                    border-radius:20px;
+                    border-radius:8px;
+                    font-weight:bold;
+                    text-decoration:none;
                 ">
-                    Pending
-                </span>
+                    Edit Data
+                </a>
+
+            </div>
+
+            {{-- Barcode Card --}}
+            @if ($registration->member_number)
+                <div class="card" style="text-align:center;">
+
+                    <h2
+                        style="
+                        color:#00e5ff;
+                        margin-bottom:15px;
+                    ">
+                        Barcode Member
+                    </h2>
+
+                    @php
+                        use Picqer\Barcode\BarcodeGeneratorPNG;
+
+                        $generator = new BarcodeGeneratorPNG();
+                        $barcode = base64_encode(
+                            $generator->getBarcode($registration->member_number, $generator::TYPE_CODE_128),
+                        );
+                    @endphp
+
+                    <img src="data:image/png;base64,{{ $barcode }}" alt="Barcode {{ $registration->member_number }}"
+                        style="
+                        max-width:280px;
+                        width:100%;
+                        height:auto;
+                    ">
+
+                    <p
+                        style="
+                        margin-top:10px;
+                        font-size:16px;
+                        letter-spacing:3px;
+                        color:#00e5ff;
+                        font-weight:bold;
+                    ">
+                        {{ $registration->member_number }}
+                    </p>
+
+                    <p style="color:#888;font-size:13px;margin-top:5px;">
+                        Tunjukkan barcode ini saat absensi acara
+                    </p>
+
+                </div>
             @endif
-
-            <br><br><br>
-
-            <a href="/admin/registrations/{{ $registration->id }}/edit"
-                style="
-                display:inline-block;
-                padding:12px 20px;
-                background:#00e5ff;
-                color:black;
-                border-radius:8px;
-                font-weight:bold;
-            ">
-                Edit Data
-            </a>
 
         </div>
 
