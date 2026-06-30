@@ -233,12 +233,21 @@
                     @endphp
 
                     @if ($barcodeSrc)
-                        <img src="{{ $barcodeSrc }}" alt="Barcode {{ $registration->member_number }}"
+                        <div
                             style="
-                            max-width:280px;
-                            width:100%;
-                            height:auto;
+                            background:white;
+                            border-radius:8px;
+                            padding:20px;
+                            display:inline-block;
                         ">
+                            <img src="{{ $barcodeSrc }}" alt="Barcode {{ $registration->member_number }}"
+                                style="
+                                max-width:280px;
+                                width:100%;
+                                height:auto;
+                                display:block;
+                            ">
+                        </div>
                     @else
                         <div
                             style="
