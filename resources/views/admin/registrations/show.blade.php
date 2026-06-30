@@ -216,20 +216,44 @@
                     </h2>
 
                     @php
-                        use Picqer\Barcode\BarcodeGeneratorPNG;
+                        $barcodeSrc = null;
 
-                        $generator = new BarcodeGeneratorPNG();
-                        $barcode = base64_encode(
-                            $generator->getBarcode($registration->member_number, $generator::TYPE_CODE_128),
-                        );
+                        try {
+                            if (function_exists('imagecreate')) {
+                                $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
+                                $barcodeData = $generator->getBarcode(
+                                    $registration->member_number,
+                                    $generator::TYPE_CODE_128,
+                                );
+                                $barcodeSrc = 'data:image/png;base64,' . base64_encode($barcodeData);
+                            }
+                        } catch (\Exception $e) {
+                            $barcodeSrc = null;
+                        }
                     @endphp
 
-                    <img src="data:image/png;base64,{{ $barcode }}" alt="Barcode {{ $registration->member_number }}"
-                        style="
-                        max-width:280px;
-                        width:100%;
-                        height:auto;
-                    ">
+                    @if ($barcodeSrc)
+                        <img src="{{ $barcodeSrc }}" alt="Barcode {{ $registration->member_number }}"
+                            style="
+                            max-width:280px;
+                            width:100%;
+                            height:auto;
+                        ">
+                    @else
+                        <div
+                            style="
+                            padding:30px 20px;
+                            background:#1d1d1d;
+                            border-radius:10px;
+                            border:1px dashed #444;
+                        ">
+                            <span style="font-size:40px;display:block;margin-bottom:10px;">📱</span>
+                            <p style="color:#888;font-size:13px;">
+                                Barcode tidak dapat ditampilkan.
+                                <br>Namun nomor member tetap bisa digunakan untuk scan manual.
+                            </p>
+                        </div>
+                    @endif
 
                     <p
                         style="
