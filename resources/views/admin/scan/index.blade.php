@@ -136,7 +136,7 @@
                     border:2px solid #555;
                     border-radius:8px;
                     color:white;
-                    font-size:18px;
+                    font-size:16px;
                     letter-spacing:2px;
                     text-transform:uppercase;
                 ">
