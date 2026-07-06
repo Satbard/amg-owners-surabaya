@@ -25,18 +25,26 @@ class RegistrationController extends Controller
 
                 $q->where('full_name', 'like', "%{$keyword}%")
                     ->orWhere('phone', 'like', "%{$keyword}%")
-                    ->orWhere('license_plate', 'like', "%{$keyword}%");
+                    ->orWhere('license_plate', 'like', "%{$keyword}%")
+                    ->orWhere('member_number', 'like', "%{$keyword}%");
 
             });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('membership_status', $request->status);
         }
 
         $registrations = $query
             ->latest()
             ->get();
 
+        $status = $request->status;
+        $keyword = $request->keyword;
+
         return view(
             'admin.registrations.index',
-            compact('registrations')
+            compact('registrations', 'status', 'keyword')
         );
     }
 
@@ -235,5 +243,61 @@ class RegistrationController extends Controller
             new RegistrationsExport,
             'registrations.xlsx'
         );
+    }
+
+    public function batchUpdate(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:registrations,id',
+            'action' => 'required|in:approve,reject,pending',
+        ]);
+
+        $statusMap = [
+            'approve' => 'Approved',
+            'reject' => 'Rejected',
+            'pending' => 'Pending',
+        ];
+
+        $newStatus = $statusMap[$request->action];
+        $count = 0;
+
+        foreach ($request->ids as $id) {
+            $registration = Registration::findOrFail($id);
+
+            // Only process if truly changing status
+            $oldStatus = $registration->membership_status;
+
+            $registration->update(['membership_status' => $newStatus]);
+
+            // If newly approved, generate member_number & auto-add to active events
+            if ($newStatus === 'Approved' && ! $registration->member_number) {
+                $registration->member_number = Registration::generateMemberNumber($registration->id);
+                $registration->save();
+
+                $activeEvents = Event::whereIn('status', ['upcoming', 'ongoing'])->get();
+
+                foreach ($activeEvents as $event) {
+                    EventAttendance::firstOrCreate([
+                        'event_id' => $event->id,
+                        'registration_id' => $registration->id,
+                    ], [
+                        'status' => 'tidak_hadir',
+                    ]);
+                }
+            }
+
+            $count++;
+        }
+
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'activity' => "Batch update {$count} registrasi menjadi {$newStatus}",
+            'ip_address' => $request->ip(),
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('success', "{$count} data berhasil diperbarui menjadi {$newStatus}.");
     }
 }

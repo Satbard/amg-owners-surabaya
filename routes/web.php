@@ -65,6 +65,10 @@ Route::prefix('admin')->group(function () {
             AdminRegistrationController::class, 'destroy',
         ]);
 
+        Route::post('/registrations/batch-update', [
+            AdminRegistrationController::class, 'batchUpdate',
+        ]);
+
         Route::get('/registrations-trash', [
             AdminRegistrationController::class, 'trash',
         ]);
@@ -89,6 +93,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/events/{event}/edit', [EventController::class, 'edit']);
         Route::put('/events/{event}', [EventController::class, 'update']);
         Route::delete('/events/{event}', [EventController::class, 'destroy']);
+        Route::get('/events/{event}/export-attendance', [EventController::class, 'exportAttendance']);
 
         // Attendance
         Route::put('/events/{event}/attendance/{attendance}', [

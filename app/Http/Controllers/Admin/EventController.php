@@ -106,4 +106,18 @@ class EventController extends Controller
         return redirect('/admin/events')
             ->with('success', 'Acara berhasil dihapus.');
     }
+
+    public function exportAttendance(Event $event)
+    {
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'activity' => 'Export absensi acara: '.$event->title,
+            'ip_address' => request()->ip(),
+        ]);
+
+        return Excel::download(
+            new AttendanceExport($event->id),
+            'absensi-'.Str::slug($event->title).'.xlsx'
+        );
+    }
 }

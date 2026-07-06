@@ -126,7 +126,7 @@
         </div>
     @endif
 
-    {{-- Scan Section --}}
+    {{-- Scan & Export Section --}}
     <div class="card" style="margin-bottom:20px;">
 
         <div
@@ -145,17 +145,33 @@
                 </p>
             </div>
 
-            <a href="/admin/scan?event_id={{ $event->id }}"
-                style="
-                padding:10px 20px;
-                background:#00e5ff;
-                color:black;
-                border-radius:8px;
-                font-weight:bold;
-                text-decoration:none;
-            ">
-                Buka Halaman Scan
-            </a>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+                <a href="/admin/events/{{ $event->id }}/export-attendance"
+                    style="
+                    padding:10px 20px;
+                    background:#2e7d32;
+                    color:white;
+                    border-radius:8px;
+                    font-weight:bold;
+                    text-decoration:none;
+                ">
+                    ⬇ Export Excel
+                </a>
+
+                <a href="/admin/scan?event_id={{ $event->id }}"
+                    style="
+                    padding:10px 20px;
+                    background:#00e5ff;
+                    color:black;
+                    border-radius:8px;
+                    font-weight:bold;
+                    text-decoration:none;
+                ">
+                    Buka Halaman Scan
+                </a>
+
+            </div>
 
         </div>
 
