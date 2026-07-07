@@ -95,6 +95,9 @@ Route::prefix('admin')->group(function () {
         Route::delete('/events/{event}', [EventController::class, 'destroy']);
         Route::get('/events/{event}/export-attendance', [EventController::class, 'exportAttendance']);
 
+        // Manual add members to attendance
+        Route::post('/events/{event}/add-members', [EventController::class, 'addMembers']);
+
         // Attendance
         Route::put('/events/{event}/attendance/{attendance}', [
             AttendanceController::class, 'update',

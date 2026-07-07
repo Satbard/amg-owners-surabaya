@@ -29,10 +29,14 @@ class AttendanceController extends Controller
 
         $attendance->update($data);
 
+        $memberName = $attendance->registration->full_name
+            ?? $attendance->registration->member_number
+            ?? '(Member telah dihapus)';
+
         ActivityLog::create([
             'user_id' => auth()->id(),
             'activity' => 'Mengubah absensi '.
-                $attendance->registration->full_name.
+                $memberName.
                 ' pada acara '.$event->title.
                 ' menjadi '.$request->status,
             'ip_address' => $request->ip(),

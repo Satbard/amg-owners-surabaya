@@ -63,7 +63,51 @@ class EventController extends Controller
     {
         $event->load(['attendances.registration']);
 
-        return view('admin.events.show', compact('event'));
+        // Filter out attendances with no registration (orphaned records)
+        $event->attendances = $event->attendances->filter(function ($attendance) {
+            return $attendance->registration !== null;
+        });
+
+        // Get approved members not yet in this event's attendance list
+        $existingIds = $event->attendances->pluck('registration_id')->toArray();
+        $availableMembers = Registration::where('membership_status', 'Approved')
+            ->whereNotNull('member_number')
+            ->whereNotIn('id', $existingIds)
+            ->orderBy('full_name')
+            ->get();
+
+        return view('admin.events.show', compact('event', 'availableMembers'));
+    }
+
+    public function addMembers(Request $request, Event $event)
+    {
+        $request->validate([
+            'registration_ids' => 'required|array',
+            'registration_ids.*' => 'exists:registrations,id',
+        ]);
+
+        $added = 0;
+        foreach ($request->registration_ids as $registrationId) {
+            $attendance = EventAttendance::firstOrCreate([
+                'event_id' => $event->id,
+                'registration_id' => $registrationId,
+            ], [
+                'status' => 'tidak_hadir',
+            ]);
+
+            if ($attendance->wasRecentlyCreated) {
+                $added++;
+            }
+        }
+
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'activity' => "Menambahkan {$added} member ke absensi acara: {$event->title}",
+            'ip_address' => $request->ip(),
+        ]);
+
+        return redirect("/admin/events/{$event->id}")
+            ->with('success', "{$added} member berhasil ditambahkan ke daftar absensi.");
     }
 
     public function edit(Event $event)

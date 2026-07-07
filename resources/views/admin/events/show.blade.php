@@ -177,6 +177,90 @@
 
     </div>
 
+    {{-- Add Members to Attendance --}}
+    @if (isset($availableMembers) && $availableMembers->count())
+        <div class="card" style="margin-bottom:20px;">
+
+            <h3 style="margin-bottom:15px;">
+                ➕ Tambah Member ke Daftar Absensi
+            </h3>
+
+            <p style="color:#aaa;font-size:14px;margin-bottom:15px;">
+                Pilih member yang sudah disetujui (Approved) namun belum terdaftar di acara ini:
+            </p>
+
+            <form method="POST" action="/admin/events/{{ $event->id }}/add-members">
+
+                @csrf
+
+                <div
+                    style="
+                    display:grid;
+                    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+                    gap:8px;
+                    max-height:300px;
+                    overflow-y:auto;
+                    margin-bottom:15px;
+                    padding:4px;
+                ">
+
+                    @foreach ($availableMembers as $member)
+                        <label
+                            style="
+                            display:flex;
+                            align-items:center;
+                            gap:10px;
+                            padding:10px 12px;
+                            background:#1d1d1d;
+                            border-radius:8px;
+                            cursor:pointer;
+                            border:1px solid #333;
+                            transition:border-color 0.2s;
+                        ">
+                            <input type="checkbox" name="registration_ids[]" value="{{ $member->id }}"
+                                style="width:18px;height:18px;cursor:pointer;">
+
+                            <div style="line-height:1.4;">
+                                <strong style="color:#00e5ff;">
+                                    {{ $member->member_number }}
+                                </strong>
+                                <br>
+                                <span style="font-size:14px;">
+                                    {{ $member->full_name }}
+                                </span>
+                                <span style="color:#888;font-size:13px;">
+                                    · {{ $member->phone }}
+                                </span>
+                            </div>
+                        </label>
+                    @endforeach
+
+                </div>
+
+                <button type="submit"
+                    style="
+                    padding:10px 24px;
+                    background:#2e7d32;
+                    color:white;
+                    border:none;
+                    border-radius:8px;
+                    font-weight:bold;
+                    cursor:pointer;
+                ">
+                    Tambahkan ke Absensi
+                </button>
+
+            </form>
+
+        </div>
+    @elseif (isset($availableMembers))
+        <div class="card" style="margin-bottom:20px;text-align:center;padding:20px;">
+            <p style="color:#aaa;">
+                ✅ Semua member approved sudah terdaftar di acara ini.
+            </p>
+        </div>
+    @endif
+
     {{-- Attendance List --}}
     <div class="card">
 
@@ -219,11 +303,11 @@
                                 </td>
 
                                 <td style="padding:12px;">
-                                    {{ $attendance->registration->full_name }}
+                                    {{ $attendance->registration->full_name ?? '[Member Dihapus]' }}
                                 </td>
 
                                 <td style="padding:12px;">
-                                    {{ $attendance->registration->phone }}
+                                    {{ $attendance->registration->phone ?? '-' }}
                                 </td>
 
                                 <td style="padding:12px;">

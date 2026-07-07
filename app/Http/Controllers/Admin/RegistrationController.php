@@ -119,7 +119,7 @@ class RegistrationController extends Controller
 
         $registration->update($validated);
 
-        // Generate member_number and auto-add to active events when approved
+        // Generate member_number when newly approved
         if (
             $validated['membership_status'] === 'Approved' &&
             ! $registration->member_number
@@ -129,8 +129,10 @@ class RegistrationController extends Controller
                     $registration->id
                 );
             $registration->save();
+        }
 
-            // Auto-add to all active events
+        // Auto-add approved members to all active events
+        if ($validated['membership_status'] === 'Approved') {
             $activeEvents = Event::whereIn(
                 'status',
                 ['upcoming', 'ongoing']
@@ -200,6 +202,28 @@ class RegistrationController extends Controller
 
         $registration->restore();
 
+        // Re-add to active events in case new events were created while deleted
+        if ($registration->membership_status === 'Approved') {
+            $activeEvents = Event::whereIn(
+                'status',
+                ['upcoming', 'ongoing']
+            )->get();
+
+            $addedCount = 0;
+            foreach ($activeEvents as $event) {
+                $attendance = EventAttendance::firstOrCreate([
+                    'event_id' => $event->id,
+                    'registration_id' => $registration->id,
+                ], [
+                    'status' => 'tidak_hadir',
+                ]);
+
+                if ($attendance->wasRecentlyCreated) {
+                    $addedCount++;
+                }
+            }
+        }
+
         ActivityLog::create([
             'user_id' => auth()->id(),
             'activity' => 'Restore pendaftaran ID '.
@@ -207,12 +231,14 @@ class RegistrationController extends Controller
             'ip_address' => request()->ip(),
         ]);
 
+        $message = 'Data berhasil dipulihkan.';
+        if (isset($addedCount) && $addedCount > 0) {
+            $message .= " {$addedCount} acara aktif diperbarui.";
+        }
+
         return redirect()
             ->back()
-            ->with(
-                'success',
-                'Data berhasil dipulihkan.'
-            );
+            ->with('success', $message);
     }
 
     public function forceDelete($id)
@@ -270,11 +296,14 @@ class RegistrationController extends Controller
 
             $registration->update(['membership_status' => $newStatus]);
 
-            // If newly approved, generate member_number & auto-add to active events
+            // Generate member_number when newly approved
             if ($newStatus === 'Approved' && ! $registration->member_number) {
                 $registration->member_number = Registration::generateMemberNumber($registration->id);
                 $registration->save();
+            }
 
+            // Auto-add approved members to all active events
+            if ($newStatus === 'Approved') {
                 $activeEvents = Event::whereIn('status', ['upcoming', 'ongoing'])->get();
 
                 foreach ($activeEvents as $event) {
