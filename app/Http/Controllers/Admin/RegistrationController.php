@@ -150,6 +150,15 @@ class RegistrationController extends Controller
             }
         }
 
+        // Remove rejected members from all active event attendance lists
+        if ($validated['membership_status'] === 'Rejected') {
+            EventAttendance::whereIn('event_id', function ($q) {
+                $q->select('id')->from('events')
+                    ->whereIn('status', ['upcoming', 'ongoing']);
+            })->where('registration_id', $registration->id)
+                ->delete();
+        }
+
         ActivityLog::create([
             'user_id' => auth()->id(),
             'activity' => 'Mengubah data pendaftaran ID '.
@@ -389,6 +398,15 @@ class RegistrationController extends Controller
                         'status' => 'tidak_hadir',
                     ]);
                 }
+            }
+
+            // Remove rejected members from all active event attendance lists
+            if ($newStatus === 'Rejected') {
+                EventAttendance::whereIn('event_id', function ($q) {
+                    $q->select('id')->from('events')
+                        ->whereIn('status', ['upcoming', 'ongoing']);
+                })->where('registration_id', $registration->id)
+                    ->delete();
             }
 
             $count++;
