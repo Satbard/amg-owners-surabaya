@@ -25,6 +25,18 @@
             Export Excel
         </a>
 
+        <a href="/admin/registrations-export-barcodes"
+            style="
+        padding:10px 18px;
+        background:#7c4dff;
+        color:white;
+        border-radius:8px;
+        font-weight:bold;
+        text-decoration:none;
+        ">
+            📷 Export Barcode
+        </a>
+
         <a href="/admin/registrations-trash"
             style="
         padding:10px 18px;
@@ -380,7 +392,7 @@
                             const action = this.dataset.action;
                             if (!confirm(
                                     `Yakin akan ${actionLabels[action]} ${checked.length} data terpilih?`
-                                    )) {
+                                )) {
                                 return;
                             }
                             document.getElementById('batchAction').value = action;

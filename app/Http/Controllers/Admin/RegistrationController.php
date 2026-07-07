@@ -10,6 +10,8 @@ use App\Models\EventAttendance;
 use App\Models\Registration;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Picqer\Barcode\BarcodeGeneratorPNG;
+use ZipArchive;
 
 class RegistrationController extends Controller
 {
@@ -269,6 +271,79 @@ class RegistrationController extends Controller
             new RegistrationsExport,
             'registrations.xlsx'
         );
+    }
+
+    public function exportBarcodes()
+    {
+        $approvedMembers = Registration::where('membership_status', 'Approved')
+            ->whereNotNull('member_number')
+            ->get();
+
+        if ($approvedMembers->isEmpty()) {
+            return redirect()
+                ->back()
+                ->with('error', 'Tidak ada member approved dengan barcode.');
+        }
+
+        // Create temp directory
+        $tempDir = storage_path('app/private/barcode-exports/'.now()->timestamp);
+        if (! is_dir($tempDir)) {
+            mkdir($tempDir, 0755, true);
+        }
+
+        $generator = new BarcodeGeneratorPNG;
+
+        foreach ($approvedMembers as $member) {
+            try {
+                $barcodeData = $generator->getBarcode(
+                    $member->member_number,
+                    $generator::TYPE_CODE_128,
+                );
+
+                $safeName = preg_replace('/[^A-Za-z0-9_-]/', '_', $member->member_number);
+                file_put_contents(
+                    $tempDir.'/'.$safeName.'.png',
+                    $barcodeData
+                );
+            } catch (\Exception $e) {
+                // Skip individual member if barcode generation fails
+                continue;
+            }
+        }
+
+        // Create ZIP archive
+        $zipPath = storage_path('app/private/barcode-exports/barcodes-'.now()->timestamp.'.zip');
+        $zip = new ZipArchive;
+
+        if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
+            // Cleanup temp dir
+            array_map('unlink', glob($tempDir.'/*.*'));
+            rmdir($tempDir);
+
+            return redirect()
+                ->back()
+                ->with('error', 'Gagal membuat file ZIP.');
+        }
+
+        // Add files to ZIP
+        $files = glob($tempDir.'/*.png');
+        foreach ($files as $file) {
+            $zip->addFile($file, basename($file));
+        }
+        $zip->close();
+
+        // Cleanup temp directory
+        array_map('unlink', glob($tempDir.'/*.*'));
+        rmdir($tempDir);
+
+        // Log activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'activity' => 'Export barcode: '.count($files).' barcode member',
+            'ip_address' => request()->ip(),
+        ]);
+
+        return response()->download($zipPath, 'barcodes.zip')->deleteFileAfterSend(true);
     }
 
     public function batchUpdate(Request $request)

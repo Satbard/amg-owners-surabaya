@@ -85,6 +85,10 @@ Route::prefix('admin')->group(function () {
             AdminRegistrationController::class, 'export',
         ]);
 
+        Route::get('/registrations-export-barcodes', [
+            AdminRegistrationController::class, 'exportBarcodes',
+        ]);
+
         // Events
         Route::get('/events', [EventController::class, 'index']);
         Route::get('/events/create', [EventController::class, 'create']);
