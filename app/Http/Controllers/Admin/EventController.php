@@ -13,7 +13,14 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::latest()->get();
+        $events = Event::latest()->with('attendances.registration')->get();
+
+        // Filter out orphaned attendances (deleted members) from counts
+        foreach ($events as $event) {
+            $event->attendances = $event->attendances->filter(function ($attendance) {
+                return $attendance->registration !== null;
+            })->values();
+        }
 
         return view('admin.events.index', compact('events'));
     }
