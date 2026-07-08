@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Event;
 use App\Models\EventAttendance;
 use App\Models\Registration;
+use App\Services\BarcodeService;
 use Illuminate\Http\Request;
 
 class ScanController extends Controller
@@ -29,22 +30,34 @@ class ScanController extends Controller
     public function lookup(Request $request)
     {
         $request->validate([
-            'member_number' => 'required|string|max:20',
+            'member_number' => 'required|string|max:255',
         ]);
 
-        $member = Registration::where(
-            'member_number',
-            $request->member_number
-        )->first();
+        $input = $request->member_number;
+        $member = null;
+
+        // Try to decrypt as an encrypted barcode token first
+        $registrationId = BarcodeService::decrypt($input);
+
+        if ($registrationId) {
+            $member = Registration::find($registrationId);
+        }
+
+        // Fallback: look up by raw member_number (backward compatibility
+        // for existing barcodes printed before encryption was implemented)
+        if (! $member) {
+            $member = Registration::where(
+                'member_number',
+                $input
+            )->first();
+        }
 
         if (! $member) {
             return redirect()
                 ->back()
                 ->with(
                     'error',
-                    'Member dengan nomor '.
-                    $request->member_number.
-                    ' tidak ditemukan.'
+                    'Member dengan barcode tersebut tidak ditemukan.'
                 );
         }
 

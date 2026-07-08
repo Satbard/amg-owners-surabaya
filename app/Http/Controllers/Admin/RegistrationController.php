@@ -8,6 +8,7 @@ use App\Models\ActivityLog;
 use App\Models\Event;
 use App\Models\EventAttendance;
 use App\Models\Registration;
+use App\Services\BarcodeService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Picqer\Barcode\BarcodeGeneratorPNG;
@@ -304,11 +305,15 @@ class RegistrationController extends Controller
 
         foreach ($approvedMembers as $member) {
             try {
+                // Use encrypted registration ID as barcode content
+                $barcodeContent = BarcodeService::encrypt($member->id);
+
                 $barcodeData = $generator->getBarcode(
-                    $member->member_number,
+                    $barcodeContent,
                     $generator::TYPE_CODE_128,
                 );
 
+                // Filename still uses member_number for admin identification
                 $safeName = preg_replace('/[^A-Za-z0-9_-]/', '_', $member->member_number);
                 file_put_contents(
                     $tempDir.'/'.$safeName.'.png',

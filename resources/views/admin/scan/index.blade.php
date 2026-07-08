@@ -128,7 +128,7 @@
             <div style="display:flex;gap:10px;">
 
                 <input type="text" name="member_number" id="barcodeInput"
-                    placeholder="Ketik nomor member (contoh: AMG00001)" autofocus autocomplete="off"
+                    placeholder="Scan atau ketik barcode / nomor member" autofocus autocomplete="off"
                     style="
                     flex:1;
                     padding:14px;
@@ -160,7 +160,7 @@
 
         <p style="color:#888;font-size:13px;margin-top:10px;">
             💡 Barcode scanner USB akan otomatis mengirim setelah scan.
-            Anda juga bisa mengetik nomor member secara manual.
+            Barcode sudah diamankan — tidak bisa digandakan secara manual.
         </p>
 
     </div>
@@ -284,6 +284,7 @@
 
         <p style="color:#888;font-size:13px;margin-top:10px;">
             📱 Arahkan kamera ke barcode member. Scanner akan otomatis mendeteksi.
+            Barcode sudah diamankan dengan enkripsi.
         </p>
 
     </div>

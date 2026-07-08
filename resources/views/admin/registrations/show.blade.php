@@ -220,11 +220,11 @@
 
                         try {
                             if (function_exists('imagecreate')) {
+                                // Use encrypted registration ID as barcode content
+                                $barcodeContent = \App\Services\BarcodeService::encrypt($registration->id);
+
                                 $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
-                                $barcodeData = $generator->getBarcode(
-                                    $registration->member_number,
-                                    $generator::TYPE_CODE_128,
-                                );
+                                $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128);
                                 $barcodeSrc = 'data:image/png;base64,' . base64_encode($barcodeData);
                             }
                         } catch (\Exception $e) {
@@ -264,6 +264,7 @@
                         </div>
                     @endif
 
+                    {{-- Display member_number below barcode for visual identification --}}
                     <p
                         style="
                         margin-top:10px;
@@ -277,6 +278,10 @@
 
                     <p style="color:#888;font-size:13px;margin-top:5px;">
                         Tunjukkan barcode ini saat absensi acara
+                    </p>
+
+                    <p style="color:#666;font-size:11px;margin-top:8px;font-style:italic;">
+                        Barcode ini diamankan — tidak dapat digandakan secara manual
                     </p>
 
                 </div>
