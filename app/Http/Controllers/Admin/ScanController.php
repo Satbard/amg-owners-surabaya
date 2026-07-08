@@ -45,9 +45,12 @@ class ScanController extends Controller
     {
         $keyword = trim($request->name);
 
-        // Search by full_name or nickname using LIKE
-        $members = Registration::where('full_name', 'LIKE', "%{$keyword}%")
-            ->orWhere('nickname', 'LIKE', "%{$keyword}%")
+        // Search by full_name or nickname using LIKE — only approved members
+        $members = Registration::where('membership_status', 'Approved')
+            ->where(function ($q) use ($keyword) {
+                $q->where('full_name', 'LIKE', "%{$keyword}%")
+                    ->orWhere('nickname', 'LIKE', "%{$keyword}%");
+            })
             ->orderBy('full_name')
             ->get();
 
@@ -143,15 +146,16 @@ class ScanController extends Controller
         $input = trim($request->member_number);
         $member = null;
 
-        // Try barcode_token first (new secure tokens)
-        $member = Registration::where('barcode_token', $input)->first();
+        // Try barcode_token first (new secure tokens) — only approved members
+        $member = Registration::where('barcode_token', $input)
+            ->where('membership_status', 'Approved')
+            ->first();
 
         // Fallback: raw member_number (backward compat for printed barcodes)
         if (! $member) {
-            $member = Registration::where(
-                'member_number',
-                $input
-            )->first();
+            $member = Registration::where('member_number', $input)
+                ->where('membership_status', 'Approved')
+                ->first();
         }
 
         if (! $member) {
