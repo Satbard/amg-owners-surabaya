@@ -51,7 +51,8 @@
                 border-top:1px solid #222;
             ">
 
-                                <td style="padding:12px;">
+                                <td style="padding:12px;"
+                                    data-sort="{{ $log->created_at?->timestamp ?? strtotime($log->created_at) }}">
 
                                     @if ($log->created_at instanceof \Carbon\Carbon)
                                         {{ $log->created_at->format('d M Y H:i') }}
