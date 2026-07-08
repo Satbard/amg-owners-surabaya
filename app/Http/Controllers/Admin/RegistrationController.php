@@ -325,8 +325,9 @@ class RegistrationController extends Controller
                     $generator::TYPE_CODE_128,
                 );
 
-                // Filename still uses member_number for admin identification
-                $safeName = preg_replace('/[^A-Za-z0-9_-]/', '_', $member->member_number);
+                // Filename uses member's full name for admin identification
+                // (NOT member_number, to avoid exposing the sequential number)
+                $safeName = preg_replace('/[^A-Za-z0-9_-]/', '_', $member->full_name);
                 file_put_contents(
                     $tempDir.'/'.$safeName.'.png',
                     $barcodeData
