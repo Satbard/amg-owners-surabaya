@@ -7,18 +7,18 @@ use App\Models\Registration;
 class BarcodeService
 {
     /**
-     * Generate a cryptographically secure random alphanumeric token.
+     * Generate a cryptographically secure random token for barcode.
      *
-     * The token is 16 characters long and used as the barcode content.
-     * Unlike the raw member_number (AMG00001), this token is unpredictable
-     * and cannot be guessed or forged by members.
+     * The token is 8 uppercase alphanumeric characters, short enough for
+     * easy camera scanning while remaining unpredictable.
+     * Keyspace: 36^8 = 2.8 trillion possibilities.
      */
     public static function generateToken(): string
     {
-        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $token = '';
 
-        for ($i = 0; $i < 16; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $token .= $chars[random_int(0, strlen($chars) - 1)];
         }
 
