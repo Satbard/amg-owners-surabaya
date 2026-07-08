@@ -299,15 +299,15 @@
                             <tr style="border-top:1px solid #222;">
 
                                 <td style="padding:12px;">
-                                    {{ $attendance->registration->member_number ?? '-' }}
+                                    {{ $attendance->registration?->member_number ?? '-' }}
                                 </td>
 
                                 <td style="padding:12px;">
-                                    {{ $attendance->registration->full_name ?? '[Member Dihapus]' }}
+                                    {{ $attendance->registration?->full_name ?? '[Member Dihapus]' }}
                                 </td>
 
                                 <td style="padding:12px;">
-                                    {{ $attendance->registration->phone ?? '-' }}
+                                    {{ $attendance->registration?->phone ?? '-' }}
                                 </td>
 
                                 <td style="padding:12px;">
