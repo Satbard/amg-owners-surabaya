@@ -10,6 +10,7 @@ use App\Models\EventAttendance;
 use App\Models\Registration;
 use App\Services\BarcodeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use ZipArchive;
@@ -187,12 +188,20 @@ class RegistrationController extends Controller
     ) {
         $registration->delete();
 
-        ActivityLog::create([
-            'user_id' => auth()->id(),
-            'activity' => 'Menghapus pendaftaran ID '.
-                $registration->id,
-            'ip_address' => request()->ip(),
-        ]);
+        try {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'activity' => 'Menghapus pendaftaran ID '.
+                    $registration->id,
+                'ip_address' => request()->ip(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('ActivityLog failed: '.$e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
 
         return redirect()
             ->back()
@@ -243,12 +252,19 @@ class RegistrationController extends Controller
             }
         }
 
-        ActivityLog::create([
-            'user_id' => auth()->id(),
-            'activity' => 'Restore pendaftaran ID '.
-                $registration->id,
-            'ip_address' => request()->ip(),
-        ]);
+        try {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'activity' => 'Restore pendaftaran ID '.
+                    $registration->id,
+                'ip_address' => request()->ip(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('ActivityLog restore failed: '.$e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
 
         $message = 'Data berhasil dipulihkan.';
         if (isset($addedCount) && $addedCount > 0) {
