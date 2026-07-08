@@ -122,7 +122,7 @@ class RegistrationController extends Controller
 
         $registration->update($validated);
 
-        // Generate member_number when newly approved
+        // Generate member_number + barcode_token when newly approved
         if (
             $validated['membership_status'] === 'Approved' &&
             ! $registration->member_number
@@ -131,6 +131,13 @@ class RegistrationController extends Controller
                 Registration::generateMemberNumber(
                     $registration->id
                 );
+
+            // Generate unique barcode token
+            do {
+                $token = BarcodeService::generateToken();
+            } while (Registration::where('barcode_token', $token)->exists());
+
+            $registration->barcode_token = $token;
             $registration->save();
         }
 
@@ -305,8 +312,13 @@ class RegistrationController extends Controller
 
         foreach ($approvedMembers as $member) {
             try {
-                // Use encrypted registration ID as barcode content
-                $barcodeContent = BarcodeService::encrypt($member->id);
+                // Use barcode_token as barcode content (16 chars, unpredictable)
+                $barcodeContent = $member->barcode_token;
+
+                // Skip members without a token yet
+                if (! $barcodeContent) {
+                    continue;
+                }
 
                 $barcodeData = $generator->getBarcode(
                     $barcodeContent,
@@ -385,9 +397,16 @@ class RegistrationController extends Controller
 
             $registration->update(['membership_status' => $newStatus]);
 
-            // Generate member_number when newly approved
+            // Generate member_number + barcode_token when newly approved
             if ($newStatus === 'Approved' && ! $registration->member_number) {
                 $registration->member_number = Registration::generateMemberNumber($registration->id);
+
+                // Generate unique barcode token
+                do {
+                    $token = BarcodeService::generateToken();
+                } while (Registration::where('barcode_token', $token)->exists());
+
+                $registration->barcode_token = $token;
                 $registration->save();
             }
 

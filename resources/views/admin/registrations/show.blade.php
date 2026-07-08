@@ -220,8 +220,12 @@
 
                         try {
                             if (function_exists('imagecreate')) {
-                                // Use encrypted registration ID as barcode content
-                                $barcodeContent = \App\Services\BarcodeService::encrypt($registration->id);
+                                // Use barcode_token as content (16 chars, unpredictable)
+                                $barcodeContent = $registration->barcode_token;
+
+                                if (!$barcodeContent) {
+                                    $barcodeContent = null;
+                                }
 
                                 $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
                                 $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128);
@@ -281,7 +285,7 @@
                     </p>
 
                     <p style="color:#666;font-size:11px;margin-top:8px;font-style:italic;">
-                        Barcode ini diamankan — tidak dapat digandakan secara manual
+                        Barcode ini diamankan dengan token unik — tidak dapat digandakan
                     </p>
 
                 </div>

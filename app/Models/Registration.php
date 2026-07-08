@@ -12,6 +12,7 @@ class Registration extends Model
     protected $fillable = [
 
         'member_number',
+        'barcode_token',
 
         'full_name',
         'nickname',

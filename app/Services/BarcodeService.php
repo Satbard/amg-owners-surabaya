@@ -2,45 +2,35 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Crypt;
+use App\Models\Registration;
 
 class BarcodeService
 {
     /**
-     * Encrypt a registration ID into a URL-safe barcode token.
+     * Generate a cryptographically secure random alphanumeric token.
      *
-     * The token contains the encrypted registration ID which can only be
-     * decrypted by the server holding the APP_KEY. This prevents members
-     * from reading or generating valid barcodes manually.
+     * The token is 16 characters long and used as the barcode content.
+     * Unlike the raw member_number (AMG00001), this token is unpredictable
+     * and cannot be guessed or forged by members.
      */
-    public static function encrypt(int $registrationId): string
+    public static function generateToken(): string
     {
-        $encrypted = Crypt::encryptString((string) $registrationId);
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        $token = '';
 
-        // Convert standard base64 to URL-safe base64
-        // (remove + / = characters that may cause issues with barcode scanners)
-        $safe = str_replace(['+', '/', '='], ['-', '_', ''], $encrypted);
+        for ($i = 0; $i < 16; $i++) {
+            $token .= $chars[random_int(0, strlen($chars) - 1)];
+        }
 
-        return $safe;
+        return $token;
     }
 
     /**
-     * Decrypt a barcode token back to a registration ID.
-     *
-     * Returns null if the token cannot be decrypted (invalid or tampered).
+     * Find a member by their barcode token.
+     * Returns null if not found.
      */
-    public static function decrypt(string $token): ?int
+    public static function findByToken(string $token): ?Registration
     {
-        try {
-            // Restore standard base64 from URL-safe format
-            $original = str_replace(['-', '_'], ['+', '/'], $token);
-
-            $decrypted = Crypt::decryptString($original);
-
-            return (int) $decrypted;
-        } catch (\Exception $e) {
-            // Token is invalid, tampered, or APP_KEY has changed
-            return null;
-        }
+        return Registration::where('barcode_token', $token)->first();
     }
 }
