@@ -312,7 +312,7 @@ class RegistrationController extends Controller
 
         foreach ($approvedMembers as $member) {
             try {
-                // Use barcode_token as barcode content (16 chars, unpredictable)
+                // Use barcode_token as barcode content
                 $barcodeContent = $member->barcode_token;
 
                 // Skip members without a token yet
@@ -320,18 +320,39 @@ class RegistrationController extends Controller
                     continue;
                 }
 
+                // Generate barcode (transparent background by default)
                 $barcodeData = $generator->getBarcode(
                     $barcodeContent,
                     $generator::TYPE_CODE_128,
+                    2,  // width factor
+                    50, // height
                 );
 
-                // Filename uses member's full name for admin identification
-                // (NOT member_number, to avoid exposing the sequential number)
+                // Add white background using GD
+                $barcodeImg = imagecreatefromstring($barcodeData);
+                $width = imagesx($barcodeImg);
+                $height = imagesy($barcodeImg);
+
+                // Create white canvas with padding
+                $padding = 20;
+                $canvasW = $width + ($padding * 2);
+                $canvasH = $height + ($padding * 2);
+                $canvas = imagecreatetruecolor($canvasW, $canvasH);
+
+                // Fill with white background
+                $white = imagecolorallocate($canvas, 255, 255, 255);
+                imagefill($canvas, 0, 0, $white);
+
+                // Copy barcode onto white canvas
+                imagecopy($canvas, $barcodeImg, $padding, $padding, 0, 0, $width, $height);
+
+                // Save as PNG
                 $safeName = preg_replace('/[^A-Za-z0-9_-]/', '_', $member->full_name);
-                file_put_contents(
-                    $tempDir.'/'.$safeName.'.png',
-                    $barcodeData
-                );
+                imagepng($canvas, $tempDir.'/'.$safeName.'.png');
+
+                // Free memory
+                imagedestroy($barcodeImg);
+                imagedestroy($canvas);
             } catch (\Exception $e) {
                 // Skip individual member if barcode generation fails
                 continue;
