@@ -32,7 +32,7 @@ class ScanController extends Controller
             'member_number' => 'required|string|max:255',
         ]);
 
-        $input = $request->member_number;
+        $input = trim($request->member_number);
         $member = null;
 
         // Try to look up by barcode_token first (new secure tokens)
