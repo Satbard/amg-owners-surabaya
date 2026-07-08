@@ -29,14 +29,14 @@
         @endif
     @endif
 
-    <h1 style="margin-bottom:10px;">Scan Barcode</h1>
+    <h1 style="margin-bottom:10px;">Scan / Cari Member</h1>
 
     <p style="color:#aaa;margin-bottom:30px;">
-        Scan barcode member untuk menandai kehadiran.
+        Cari member berdasarkan nama untuk menandai kehadiran, atau scan barcode dengan kamera.
         @if (!$preselectedEventId)
-            Pilih event terlebih dahulu atau scan dulu lalu pilih event.
+            Cari atau scan dulu, lalu pilih event.
         @else
-            Scan akan langsung menandai hadir untuk acara yang dipilih.
+            Pencarian akan langsung menandai hadir untuk acara yang dipilih.
         @endif
     </p>
 
@@ -114,7 +114,7 @@
     <div id="manualPanel" class="card" style="max-width:600px;margin-bottom:30px;">
 
         <h3 style="margin-bottom:15px;">
-            Input Nomor Member Manual
+            Cari Member Berdasarkan Nama
         </h3>
 
         <form method="POST" action="/admin/scan/lookup" id="scanForm">
@@ -127,8 +127,8 @@
 
             <div style="display:flex;gap:10px;">
 
-                <input type="text" name="member_number" id="barcodeInput"
-                    placeholder="Scan atau ketik barcode / nomor member" autofocus autocomplete="off"
+                <input type="text" name="name" id="nameInput" placeholder="Ketik nama member..." autofocus
+                    autocomplete="off"
                     style="
                     flex:1;
                     padding:14px;
@@ -137,8 +137,6 @@
                     border-radius:8px;
                     color:white;
                     font-size:16px;
-                    letter-spacing:2px;
-                    text-transform:uppercase;
                 ">
 
                 <button type="submit"
@@ -159,8 +157,8 @@
         </form>
 
         <p style="color:#888;font-size:13px;margin-top:10px;">
-            💡 Barcode scanner USB akan otomatis mengirim setelah scan.
-            Barcode sudah diamankan — tidak bisa digandakan secara manual.
+            💡 Ketik nama member (atau nickname) untuk mencari dan menandai kehadiran.
+            Pencarian akan mencocokkan nama anggota yang terdaftar.
         </p>
 
     </div>
@@ -482,7 +480,7 @@
 
         // Auto-submit manual input on Enter
         document.addEventListener('DOMContentLoaded', function() {
-            const input = document.getElementById('barcodeInput');
+            const input = document.getElementById('nameInput');
 
             input.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
