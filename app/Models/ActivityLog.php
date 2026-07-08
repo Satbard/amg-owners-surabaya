@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ActivityLog extends Model
 {
-    public $timestamps = false;
-
     protected $fillable = [
         'user_id',
         'activity',
@@ -23,10 +21,11 @@ class ActivityLog extends Model
         return $this->belongsTo(User::class);
     }
 
-    protected static function booted(): void
+    /**
+     * Disable updated_at since the table only has created_at.
+     */
+    public function getUpdatedAtColumn(): ?string
     {
-        static::creating(function (ActivityLog $log) {
-            $log->created_at = $log->freshTimestamp();
-        });
+        return null;
     }
 }
