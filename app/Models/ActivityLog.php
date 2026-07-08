@@ -22,4 +22,11 @@ class ActivityLog extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (ActivityLog $log) {
+            $log->created_at = $log->freshTimestamp();
+        });
+    }
 }
