@@ -63,7 +63,7 @@
 
                                 <td style="padding:12px;">
 
-                                    {{ $log->user->name ?? '-' }}
+                                    {{ $log->user?->name ?? '-' }}
 
                                 </td>
 

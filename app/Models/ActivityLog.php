@@ -9,17 +9,13 @@ class ActivityLog extends Model
     public $timestamps = false;
 
     protected $fillable = [
-
         'user_id',
-
         'activity',
-
-        'ip_address'
+        'ip_address',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
 
     public function user()
