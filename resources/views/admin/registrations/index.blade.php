@@ -395,6 +395,21 @@
                                 )) {
                                 return;
                             }
+
+                            // Remove any previously added hidden ID inputs
+                            document.querySelectorAll('#batchForm input[name="ids[]"]').forEach(el => el
+                                .remove());
+
+                            // Dynamically add hidden inputs for each checked checkbox
+                            // (checkboxes are outside the form, so they won't be submitted natively)
+                            checked.forEach(cb => {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'ids[]';
+                                input.value = cb.value;
+                                document.getElementById('batchForm').appendChild(input);
+                            });
+
                             document.getElementById('batchAction').value = action;
                             document.getElementById('batchForm').submit();
                         });
