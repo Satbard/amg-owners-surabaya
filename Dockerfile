@@ -1,5 +1,7 @@
 FROM php:8.2-apache
 
+# Set timezone to Asia/Jakarta (WIB)
+ENV TZ=Asia/Jakarta
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -11,6 +13,9 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
+    tzdata \
+    && ln -snf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime \
+    && echo "Asia/Jakarta" > /etc/timezone \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql zip gd mbstring exif pcntl
 

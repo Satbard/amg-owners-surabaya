@@ -21,6 +21,7 @@ services:
     restart: unless-stopped
 
     environment:
+      TZ: Asia/Jakarta
       MYSQL_DATABASE: amg_owners
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_USER: amguser
