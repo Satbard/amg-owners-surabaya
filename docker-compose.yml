@@ -3,6 +3,8 @@ version: "3.8"
 services:
   app:
     build: .
+    image: amg_surabaya-app:latest
+    container_name: amg-surabaya-app
     restart: unless-stopped
 
     ports:
@@ -17,6 +19,7 @@ services:
 
   scheduler:
     build: .
+    image: amg_surabaya-scheduler:latest
     container_name: amg-scheduler
     restart: unless-stopped
     command: php artisan schedule:work
