@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     tzdata \
+    cron \
     && ln -snf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime \
     && echo "Asia/Jakarta" > /etc/timezone \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -43,4 +44,19 @@ RUN rm -rf public/storage \
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
 
+# ---------------------------------------------------------------------------
+# Laravel Scheduler (cron) — runs php artisan schedule:run every minute
+# ---------------------------------------------------------------------------
+RUN mkdir -p /etc/cron.d && \
+    echo "* * * * * www-data cd /var/www && php artisan schedule:run >> /dev/null 2>&1" \
+    > /etc/cron.d/laravel && \
+    chmod 0644 /etc/cron.d/laravel
+
+# Create startup script that starts cron then launches Apache
+RUN printf '#!/bin/bash\nservice cron start\nexec apache2-foreground\n' \
+    > /usr/local/bin/startup.sh && \
+    chmod +x /usr/local/bin/startup.sh
+
 EXPOSE 80
+
+CMD ["/usr/local/bin/startup.sh"]

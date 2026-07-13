@@ -3,26 +3,10 @@ version: "3.8"
 services:
   app:
     build: .
-    image: amg_surabaya-app:latest
-    container_name: amg-surabaya-app
     restart: unless-stopped
 
     ports:
       - "8080:80"
-
-    depends_on:
-      - db
-
-    volumes:
-      - laravel_storage:/var/www/storage
-      - laravel_uploads:/var/www/storage/app/public
-
-  scheduler:
-    build: .
-    image: amg_surabaya-scheduler:latest
-    container_name: amg-scheduler
-    restart: unless-stopped
-    command: php artisan schedule:work
 
     depends_on:
       - db
