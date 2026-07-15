@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\ActivityLog;
 
 class AuthController extends Controller
 {
@@ -21,39 +21,32 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (
-            Auth::attempt([
-                'username' => $request->username,
-                'password' => $request->password
-            ])
-        )
-
         if (Auth::attempt($credentials)) {
 
             $request->session()->regenerate();
 
             ActivityLog::create([
-                'user_id' => auth::id(),
+                'user_id' => auth()->id(),
                 'activity' => 'Login ke dashboard admin',
-                'ip_address' => $request->ip()
+                'ip_address' => $request->ip(),
             ]);
 
             return redirect()->intended('/admin');
         }
 
         return back()->withErrors([
-            'username' => 'Username atau password salah.'
+            'username' => 'Username atau password salah.',
         ]);
     }
 
     public function logout(Request $request)
     {
         ActivityLog::create([
-            'user_id' => auth::id(),
+            'user_id' => Auth::id(),
             'activity' => 'Logout dari dashboard admin',
-            'ip_address' => $request->ip()
+            'ip_address' => $request->ip(),
         ]);
-    
+
         Auth::logout();
 
         $request->session()->invalidate();
