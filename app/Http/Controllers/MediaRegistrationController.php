@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MediaBarcodeMail;
 use App\Models\HomepageContent;
 use App\Models\MediaRegistration;
+use App\Services\BarcodeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class MediaRegistrationController extends Controller
 {
