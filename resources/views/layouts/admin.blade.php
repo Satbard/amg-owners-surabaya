@@ -168,6 +168,10 @@
                 Scan Barcode
             </a>
 
+            <a href="/admin/scan-media">
+                Scan Media
+            </a>
+
             <div class="sidebar-label">Lainnya</div>
 
             <a href="/admin/registrations-trash">

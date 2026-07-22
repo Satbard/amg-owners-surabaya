@@ -20,6 +20,7 @@ class MediaRegistration extends Model
         'media_type',
         'competition_category',
         'equipment_used',
+        'barcode_token',
         'terms_agreed',
         'status',
     ];
@@ -28,4 +29,9 @@ class MediaRegistration extends Model
         'position' => 'array',
         'terms_agreed' => 'boolean',
     ];
+
+    public function otps()
+    {
+        return $this->hasMany(MediaOtp::class);
+    }
 }

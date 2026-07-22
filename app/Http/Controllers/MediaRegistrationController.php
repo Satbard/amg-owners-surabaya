@@ -79,9 +79,21 @@ class MediaRegistrationController extends Controller
         // Set terms_agreed = true since all 3 terms were validated as accepted
         $validated['terms_agreed'] = true;
 
-        MediaRegistration::create($validated);
+        // Generate unique barcode token
+        do {
+            $token = BarcodeService::generateToken();
+        } while (MediaRegistration::where('barcode_token', $token)->exists());
+
+        $validated['barcode_token'] = $token;
+
+        $registration = MediaRegistration::create($validated);
+
+        // Queue email with barcode
+        Mail::to($registration->email)->queue(new MediaBarcodeMail($registration));
 
         return redirect('/')
-            ->with('success', 'Pendaftaran media berhasil dikirim.');
+            ->with('success', 'Pendaftaran media berhasil dikirim.')
+            ->with('barcode_sent', true)
+            ->with('media_email', $registration->email);
     }
 }

@@ -36,6 +36,15 @@ Route::post('/register-media', [
     'store',
 ]);
 
+// Media Auth
+Route::get('/media-login', [MediaAuthController::class, 'showLoginForm']);
+Route::post('/media-login', [MediaAuthController::class, 'sendOtp']);
+Route::get('/media-login/verify', [MediaAuthController::class, 'showVerifyForm']);
+Route::post('/media-login/verify', [MediaAuthController::class, 'verifyOtp']);
+Route::get('/media-dashboard', [MediaAuthController::class, 'dashboard'])->middleware('media.auth');
+Route::post('/media-dashboard/resend-barcode', [MediaAuthController::class, 'resendBarcode'])->middleware('media.auth');
+Route::post('/media-logout', [MediaAuthController::class, 'logout']);
+
 Route::prefix('admin')->group(function () {
 
     Route::get('/login', [AuthController::class, 'showLogin'])
@@ -167,6 +176,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/scan', [ScanController::class, 'index']);
         Route::post('/scan/lookup', [ScanController::class, 'lookup']);
         Route::post('/scan/confirm', [ScanController::class, 'confirm']);
+
+        // Scan Media
+        Route::get('/scan-media', [ScanMediaController::class, 'index']);
+        Route::post('/scan-media/lookup', [ScanMediaController::class, 'lookup']);
+        Route::post('/scan-media/confirm', [ScanMediaController::class, 'confirm']);
 
         // Content
         Route::get('/content', [

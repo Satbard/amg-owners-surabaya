@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\MediaRegistration;
 use App\Models\Registration;
 
 class BarcodeService
@@ -32,5 +33,14 @@ class BarcodeService
     public static function findByToken(string $token): ?Registration
     {
         return Registration::where('barcode_token', $token)->first();
+    }
+
+    /**
+     * Find a media registration by its barcode token.
+     * Returns null if not found.
+     */
+    public static function findMediaByToken(string $token): ?MediaRegistration
+    {
+        return MediaRegistration::where('barcode_token', $token)->first();
     }
 }

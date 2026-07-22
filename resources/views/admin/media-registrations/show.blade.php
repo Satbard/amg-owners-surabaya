@@ -210,6 +210,70 @@
 
             </div>
 
+            {{-- Barcode Card --}}
+            @if ($mediaRegistration->barcode_token)
+                <div class="card" style="text-align:center;">
+
+                    <h2 style="color:#00e5ff;margin-bottom:15px;">
+                        Barcode Media {{ $mediaRegistration->media_name }}
+                    </h2>
+
+                    @php
+                        $barcodeSrc = null;
+                        try {
+                            if (function_exists('imagecreate')) {
+                                $barcodeContent = $mediaRegistration->barcode_token;
+                                if ($barcodeContent) {
+                                    $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
+                                    $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128);
+                                    $barcodeSrc = 'data:image/png;base64,' . base64_encode($barcodeData);
+                                }
+                            }
+                        } catch (\Exception $e) {
+                            $barcodeSrc = null;
+                        }
+                    @endphp
+
+                    @if ($barcodeSrc)
+                        <div
+                            style="
+                            background:white;
+                            border-radius:8px;
+                            padding:20px;
+                            display:inline-block;
+                        ">
+                            <img src="{{ $barcodeSrc }}" alt="Barcode {{ $mediaRegistration->barcode_token }}"
+                                style="max-width:280px;width:100%;height:auto;display:block;">
+                        </div>
+                    @else
+                        <div
+                            style="
+                            padding:30px 20px;
+                            background:#1d1d1d;
+                            border-radius:10px;
+                            border:1px dashed #444;
+                        ">
+                            <span style="font-size:40px;display:block;margin-bottom:10px;">📱</span>
+                            <p style="color:#888;font-size:13px;">
+                                Barcode tidak dapat ditampilkan.
+                            </p>
+                        </div>
+                    @endif
+
+                    <p
+                        style="
+                        margin-top:10px;
+                        font-size:16px;
+                        letter-spacing:3px;
+                        color:#00e5ff;
+                        font-weight:bold;
+                    ">
+                        {{ $mediaRegistration->barcode_token }}
+                    </p>
+
+                </div>
+            @endif
+
         </div>
 
     </div>
