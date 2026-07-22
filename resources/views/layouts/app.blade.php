@@ -496,6 +496,8 @@
 
                 <a href="/register-media">Pendaftaran Media</a>
 
+                <a href="/media-login">Media Login</a>
+
             </div>
 
         </div>
