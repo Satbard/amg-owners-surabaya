@@ -133,8 +133,8 @@
                     color:#bbb;
                     line-height:1.6;
                 ">
-                    <p>📧 Jika tidak menerima email, silakan login di halaman
-                        <strong>Media Login</strong> untuk mengirim ulang barcode.
+                    <p>📧 Jika tidak menerima email, silakan menuju ke halaman
+                        <strong>Request Barcode Media</strong> untuk mengirim ulang barcode.
                     </p>
                 </div>
 
