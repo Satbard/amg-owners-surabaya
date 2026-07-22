@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\HomepageContent;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class HomepageContentController extends Controller
@@ -204,7 +205,9 @@ class HomepageContentController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        if ($request->hasFile('media_background')) {
+        $mediaBgFile = $validated['media_background'] ?? null;
+
+        if ($mediaBgFile instanceof UploadedFile && $mediaBgFile->isValid()) {
 
             if (! empty($content->media_background)) {
 
@@ -215,11 +218,17 @@ class HomepageContentController extends Controller
             }
 
             $validated['media_background'] =
-                $request->file('media_background')
-                    ->store(
-                        'homepage/media-background',
-                        'public'
-                    );
+                $mediaBgFile->store(
+                    'homepage/media-background',
+                    'public'
+                );
+
+        } else {
+
+            // Remove from validated data if no file was uploaded,
+            // so it doesn't interfere with update()
+            unset($validated['media_background']);
+
         }
 
         /*

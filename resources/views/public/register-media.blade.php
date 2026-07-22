@@ -84,7 +84,7 @@
                     {{-- Position (Multi-select checkboxes) --}}
                     <div style="margin-bottom:5px;">
                         <label style="display:block;margin-bottom:8px;color:#ccc;font-size:14px;">
-                            Position
+                            Position (Select all that apply)
                         </label>
 
                         <div style="display:flex;flex-wrap:wrap;gap:12px;">
