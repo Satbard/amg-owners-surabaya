@@ -28,7 +28,7 @@
                 color:#00e5ff;
                 font-size:24px;
             ">
-                Media Login
+                Barcode Media
             </h1>
 
             <p
@@ -38,7 +38,7 @@
                 color:#bbb;
                 font-size:14px;
             ">
-                Masukkan email yang digunakan saat pendaftaran
+                Masukkan email yang digunakan saat pendaftaran untuk pengiriman ulang barcode media
             </p>
 
             @if (session('success'))

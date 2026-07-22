@@ -496,7 +496,7 @@
 
                 <a href="/register-media">Pendaftaran Media</a>
 
-                <a href="/media-login">Media Login</a>
+                <a href="/media-login">Request Barcode Media</a>
 
             </div>
 
