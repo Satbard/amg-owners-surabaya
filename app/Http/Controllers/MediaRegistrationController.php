@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HomepageContent;
 use App\Models\MediaRegistration;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MediaRegistrationController extends Controller
 {
@@ -88,8 +89,13 @@ class MediaRegistrationController extends Controller
 
         $registration = MediaRegistration::create($validated);
 
-        // Queue email with barcode
-        Mail::to($registration->email)->queue(new MediaBarcodeMail($registration));
+        // Send email with barcode (use send() instead of queue() to avoid queue dependency)
+        try {
+            Mail::to($registration->email)->send(new MediaBarcodeMail($registration));
+        } catch (\Throwable $e) {
+            // Log email failure but don't block registration
+            Log::warning('Failed to send media barcode email: '.$e->getMessage());
+        }
 
         return redirect('/')
             ->with('success', 'Pendaftaran media berhasil dikirim.')

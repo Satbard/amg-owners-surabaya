@@ -8,6 +8,7 @@ use App\Models\MediaOtp;
 use App\Models\MediaRegistration;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 
@@ -41,7 +42,11 @@ class MediaAuthController extends Controller
         ]);
 
         // Send OTP email
-        Mail::to($registration->email)->queue(new MediaOtpMail($registration, $otp));
+        try {
+            Mail::to($registration->email)->send(new MediaOtpMail($registration, $otp));
+        } catch (\Throwable $e) {
+            Log::warning('Failed to send OTP email: '.$e->getMessage());
+        }
 
         // Store email in session for verify step
         session()->put('media_login_email', $registration->email);
@@ -137,7 +142,14 @@ class MediaAuthController extends Controller
         $registrationId = session('media_registration_id');
         $registration = MediaRegistration::findOrFail($registrationId);
 
-        Mail::to($registration->email)->queue(new MediaBarcodeMail($registration));
+        try {
+            Mail::to($registration->email)->send(new MediaBarcodeMail($registration));
+        } catch (\Throwable $e) {
+            Log::warning('Failed to resend barcode email: '.$e->getMessage());
+
+            return redirect('/media-dashboard')
+                ->with('error', 'Gagal mengirim email. Silakan coba lagi nanti.');
+        }
 
         return redirect('/media-dashboard')
             ->with('success', 'Barcode telah dikirim ulang ke email '.$registration->email.'.');
