@@ -270,9 +270,11 @@
                             'I agree to follow all event rules and organizer instructions.',
                             'I grant the organizer permission to repost or feature my submitted content with proper credit.',
                         ];
+                        $termNames = ['term_1', 'term_2', 'term_3'];
                     @endphp
 
                     @foreach ($terms as $i => $term)
+                        @php $field = $termNames[$i]; @endphp
                         <label
                             style="
                             display:flex;
@@ -284,18 +286,17 @@
                             border-radius:8px;
                             border:1px solid #333;
                             font-size:14px;
-                            color:#ddd;
+                            @error($field) border-color:#ff4d4d; @enderror
                         ">
-                            <input type="checkbox" name="terms_agreed" value="1"
-                                {{ old('terms_agreed') ? 'checked' : '' }}
+                            <input type="checkbox" name="{{ $field }}" value="1"
+                                {{ old($field) ? 'checked' : '' }}
                                 style="margin-top:2px;width:18px;height:18px;cursor:pointer;accent-color:#00e5ff;">
                             <span>{{ $term }}</span>
                         </label>
+                        @error($field)
+                            <div class="error-text" style="margin-top:-5px;">{{ $message }}</div>
+                        @enderror
                     @endforeach
-
-                    @error('terms_agreed')
-                        <div class="error-text">{{ $message }}</div>
-                    @enderror
 
                 </div>
 

@@ -42,8 +42,10 @@ class MediaRegistrationController extends Controller
             'competition_category' => 'required|in:Photography,Videography / Reels',
             'equipment_used' => 'required|in:Camera,Smartphone,Drone',
 
-            // Terms
-            'terms_agreed' => 'accepted',
+            // Terms — each must be checked individually
+            'term_1' => 'accepted',
+            'term_2' => 'accepted',
+            'term_3' => 'accepted',
 
         ], [
 
@@ -68,9 +70,14 @@ class MediaRegistrationController extends Controller
             'equipment_used.required' => 'Equipment yang digunakan wajib dipilih.',
 
             // Terms
-            'terms_agreed.accepted' => 'Anda harus menyetujui seluruh ketentuan yang berlaku.',
+            'term_1.accepted' => 'Anda harus menyetujui seluruh ketentuan yang berlaku.',
+            'term_2.accepted' => 'Anda harus menyetujui seluruh ketentuan yang berlaku.',
+            'term_3.accepted' => 'Anda harus menyetujui seluruh ketentuan yang berlaku.',
 
         ]);
+
+        // Set terms_agreed = true since all 3 terms were validated as accepted
+        $validated['terms_agreed'] = true;
 
         MediaRegistration::create($validated);
 
