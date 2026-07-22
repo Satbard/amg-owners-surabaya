@@ -165,7 +165,7 @@
             </a>
 
             <a href="/admin/scan">
-                Scan Barcode
+                Scan Member
             </a>
 
             <a href="/admin/scan-media">
