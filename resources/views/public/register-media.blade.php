@@ -38,7 +38,7 @@
                 margin-bottom:10px;
                 color:#00e5ff;
             ">
-                Pendaftaran Media
+                Media Registration
             </h1>
 
             <p
@@ -47,7 +47,7 @@
                 margin-bottom:40px;
                 color:#bbb;
             ">
-                Untuk Fotografer, Videografer, Jurnalis, dan Content Creator
+                AMG Owners Surabaya by Hartono Group
             </p>
 
             <form method="POST" action="/register-media">
