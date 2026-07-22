@@ -174,6 +174,10 @@
                 Trash Bin
             </a>
 
+            <a href="/admin/media-registrations-trash">
+                Trash Bin Media
+            </a>
+
             <a href="/admin/activity-logs">
                 Activity Logs
             </a>

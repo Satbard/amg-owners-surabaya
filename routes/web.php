@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\HomepageContentController;
+use App\Http\Controllers\Admin\MediaRegistrationController as AdminMediaRegistrationController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\ScanController;
 use App\Http\Controllers\HomeController;
