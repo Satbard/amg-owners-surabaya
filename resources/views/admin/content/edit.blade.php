@@ -157,6 +157,38 @@
 
             </div>
 
+
+
+            <!-- Background Media Form -->
+
+            <div class="card">
+
+                <h2 style="color:#00e5ff;margin-bottom:20px;">
+                    Background Pendaftaran Media
+                </h2>
+
+                @if ($content->media_background)
+                    <div style="text-align:center;margin-bottom:20px;">
+
+                        <img src="{{ asset('storage/' . $content->media_background) }}"
+                            style="
+                        width:100%;
+                        max-height:180px;
+                        object-fit:cover;
+                        border-radius:8px;
+                    ">
+
+                    </div>
+                @endif
+
+                <input type="file" name="media_background" class="form-input">
+
+                <small style="color:#aaa;">
+                    Background khusus halaman Pendaftaran Media.
+                </small>
+
+            </div>
+
         </div>
 
         <br>

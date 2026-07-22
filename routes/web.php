@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\HomepageContentController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\ScanController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MediaRegistrationController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,16 @@ Route::get('/register', [
 
 Route::post('/register', [
     RegistrationController::class,
+    'store',
+]);
+
+Route::get('/register-media', [
+    MediaRegistrationController::class,
+    'create',
+]);
+
+Route::post('/register-media', [
+    MediaRegistrationController::class,
     'store',
 ]);
 
@@ -87,6 +98,47 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/registrations-export-barcodes', [
             AdminRegistrationController::class, 'exportBarcodes',
+        ]);
+
+        // Media Registrations
+        Route::get('/media-registrations', [
+            AdminMediaRegistrationController::class, 'index',
+        ]);
+
+        Route::get('/media-registrations/{mediaRegistration}', [
+            AdminMediaRegistrationController::class, 'show',
+        ]);
+
+        Route::get('/media-registrations/{mediaRegistration}/edit', [
+            AdminMediaRegistrationController::class, 'edit',
+        ]);
+
+        Route::put('/media-registrations/{mediaRegistration}', [
+            AdminMediaRegistrationController::class, 'update',
+        ]);
+
+        Route::delete('/media-registrations/{mediaRegistration}', [
+            AdminMediaRegistrationController::class, 'destroy',
+        ]);
+
+        Route::post('/media-registrations/batch-update', [
+            AdminMediaRegistrationController::class, 'batchUpdate',
+        ]);
+
+        Route::get('/media-registrations-trash', [
+            AdminMediaRegistrationController::class, 'trash',
+        ]);
+
+        Route::post('/media-registrations-trash/{id}/restore', [
+            AdminMediaRegistrationController::class, 'restore',
+        ]);
+
+        Route::delete('/media-registrations-trash/{id}/force-delete', [
+            AdminMediaRegistrationController::class, 'forceDelete',
+        ]);
+
+        Route::get('/media-registrations-export', [
+            AdminMediaRegistrationController::class, 'export',
         ]);
 
         // Events

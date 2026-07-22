@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\HomepageContent;
 use App\Models\ActivityLog;
+use App\Models\HomepageContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,7 +17,7 @@ class HomepageContentController extends Controller
             [
                 'title' => 'AMG Owners Surabaya',
                 'description' => 'Selamat datang di website resmi AMG Owners Surabaya.',
-                'button_text' => 'Daftar Sekarang'
+                'button_text' => 'Daftar Sekarang',
             ]
         );
 
@@ -34,7 +34,7 @@ class HomepageContentController extends Controller
             [
                 'title' => 'AMG Owners Surabaya',
                 'description' => 'Selamat datang di website resmi AMG Owners Surabaya.',
-                'button_text' => 'Daftar Sekarang'
+                'button_text' => 'Daftar Sekarang',
             ]
         );
 
@@ -42,75 +42,61 @@ class HomepageContentController extends Controller
 
             [
 
-                'title' =>
-                    'required|max:255',
+                'title' => 'required|max:255',
 
-                'description' =>
-                    'required',
+                'description' => 'required',
 
-                'button_text' =>
-                    'required|max:255',
+                'button_text' => 'required|max:255',
 
-                'logo' =>
-                    'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+                'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
-                'header_logo' =>
-                    'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+                'header_logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
-                'background' =>
-                    'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+                'background' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
 
-                'registration_background' =>
-                    'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+                'registration_background' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+
+                'media_background' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
 
             ],
 
             [
 
-                'title.required' =>
-                    'Judul homepage wajib diisi.',
+                'title.required' => 'Judul homepage wajib diisi.',
 
-                'description.required' =>
-                    'Deskripsi homepage wajib diisi.',
+                'description.required' => 'Deskripsi homepage wajib diisi.',
 
-                'button_text.required' =>
-                    'Tulisan tombol wajib diisi.',
+                'button_text.required' => 'Tulisan tombol wajib diisi.',
 
-                'logo.image' =>
-                    'Logo harus berupa gambar.',
+                'logo.image' => 'Logo harus berupa gambar.',
 
-                'logo.mimes' =>
-                    'Logo harus berformat JPG, JPEG, PNG, atau WEBP.',
+                'logo.mimes' => 'Logo harus berformat JPG, JPEG, PNG, atau WEBP.',
 
-                'logo.max' =>
-                    'Ukuran logo maksimal 2 MB.',
+                'logo.max' => 'Ukuran logo maksimal 2 MB.',
 
-                'header_logo.image' =>
-                    'Logo header harus berupa gambar.',
+                'header_logo.image' => 'Logo header harus berupa gambar.',
 
-                'header_logo.mimes' =>
-                    'Logo header harus berformat JPG, JPEG, PNG, atau WEBP.',
+                'header_logo.mimes' => 'Logo header harus berformat JPG, JPEG, PNG, atau WEBP.',
 
-                'header_logo.max' =>
-                    'Ukuran logo header maksimal 2 MB.',
+                'header_logo.max' => 'Ukuran logo header maksimal 2 MB.',
 
-                'background.image' =>
-                    'Background homepage harus berupa gambar.',
+                'background.image' => 'Background homepage harus berupa gambar.',
 
-                'background.mimes' =>
-                    'Background homepage harus berformat JPG, JPEG, PNG, atau WEBP.',
+                'background.mimes' => 'Background homepage harus berformat JPG, JPEG, PNG, atau WEBP.',
 
-                'background.max' =>
-                    'Ukuran background homepage maksimal 4 MB.',
+                'background.max' => 'Ukuran background homepage maksimal 4 MB.',
 
-                'registration_background.image' =>
-                    'Background halaman pendaftaran harus berupa gambar.',
+                'registration_background.image' => 'Background halaman pendaftaran harus berupa gambar.',
 
-                'registration_background.mimes' =>
-                    'Background halaman pendaftaran harus berformat JPG, JPEG, PNG, atau WEBP.',
+                'registration_background.mimes' => 'Background halaman pendaftaran harus berformat JPG, JPEG, PNG, atau WEBP.',
 
-                'registration_background.max' =>
-                    'Ukuran background halaman pendaftaran maksimal 4 MB.',
+                'registration_background.max' => 'Ukuran background halaman pendaftaran maksimal 4 MB.',
+
+                'media_background.image' => 'Background halaman pendaftaran media harus berupa gambar.',
+
+                'media_background.mimes' => 'Background halaman pendaftaran media harus berformat JPG, JPEG, PNG, atau WEBP.',
+
+                'media_background.max' => 'Ukuran background halaman pendaftaran media maksimal 4 MB.',
 
             ]
 
@@ -124,7 +110,7 @@ class HomepageContentController extends Controller
 
         if ($request->hasFile('logo')) {
 
-            if (!empty($content->logo)) {
+            if (! empty($content->logo)) {
 
                 Storage::disk('public')->delete(
                     $content->logo
@@ -148,7 +134,7 @@ class HomepageContentController extends Controller
 
         if ($request->hasFile('header_logo')) {
 
-            if (!empty($content->header_logo)) {
+            if (! empty($content->header_logo)) {
 
                 Storage::disk('public')->delete(
                     $content->header_logo
@@ -172,7 +158,7 @@ class HomepageContentController extends Controller
 
         if ($request->hasFile('background')) {
 
-            if (!empty($content->background)) {
+            if (! empty($content->background)) {
 
                 Storage::disk('public')->delete(
                     $content->background
@@ -196,7 +182,7 @@ class HomepageContentController extends Controller
 
         if ($request->hasFile('registration_background')) {
 
-            if (!empty($content->registration_background)) {
+            if (! empty($content->registration_background)) {
 
                 Storage::disk('public')->delete(
                     $content->registration_background
@@ -208,6 +194,30 @@ class HomepageContentController extends Controller
                 $request->file('registration_background')
                     ->store(
                         'homepage/registration-background',
+                        'public'
+                    );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Upload Media Background
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('media_background')) {
+
+            if (! empty($content->media_background)) {
+
+                Storage::disk('public')->delete(
+                    $content->media_background
+                );
+
+            }
+
+            $validated['media_background'] =
+                $request->file('media_background')
+                    ->store(
+                        'homepage/media-background',
                         'public'
                     );
         }
@@ -232,11 +242,9 @@ class HomepageContentController extends Controller
 
             'user_id' => auth()->id(),
 
-            'activity' =>
-                'Mengubah Homepage CMS',
+            'activity' => 'Mengubah Homepage CMS',
 
-            'ip_address' =>
-                $request->ip()
+            'ip_address' => $request->ip(),
 
         ]);
 

@@ -14,6 +14,8 @@ class HomepageContent extends Model
 
         'registration_background',
 
+        'media_background',
+
         'title',
 
         'description',
@@ -22,7 +24,7 @@ class HomepageContent extends Model
 
         'header_logo',
 
-        'updated_by'
+        'updated_by',
     ];
 
     public function updater()
