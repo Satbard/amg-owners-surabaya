@@ -209,10 +209,17 @@
 
                     <select name="equipment_used" class="form-input">
 
-                        @foreach (['Camera', 'Smartphone', 'Drone'] as $eq)
-                            <option value="{{ $eq }}"
-                                {{ old('equipment_used', $mediaRegistration->equipment_used) == $eq ? 'selected' : '' }}>
-                                {{ $eq }}
+                        @php
+                            $equipmentOptions = [
+                                'Camera' => 'Camera',
+                                'Smartphone' => 'Smartphone',
+                                'Drone' => 'Drone (Subject to Organizer Approval)',
+                            ];
+                        @endphp
+                        @foreach ($equipmentOptions as $eqVal => $eqLabel)
+                            <option value="{{ $eqVal }}"
+                                {{ old('equipment_used', $mediaRegistration->equipment_used) == $eqVal ? 'selected' : '' }}>
+                                {{ $eqLabel }}
                             </option>
                         @endforeach
 
