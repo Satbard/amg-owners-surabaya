@@ -61,7 +61,7 @@
     {{-- Panel: Manual Input --}}
     <div id="manualPanel" class="card" style="max-width:600px;margin-bottom:30px;">
 
-        <h3 style="margin-bottom:15px;">Cari Media Berdasarkan Nama</h3>
+        <h3 style="margin-bottom:15px;">Cari Media — Nama atau Barcode</h3>
 
         <form method="POST" action="/admin/scan-media/lookup" id="scanForm">
             @csrf
@@ -69,7 +69,7 @@
                 <input type="hidden" name="media_event_id" value="{{ $preselectedEventId }}">
             @endif
 
-            <div style="display:flex;gap:10px;">
+            <div style="display:flex;gap:10px;margin-bottom:10px;">
                 <input type="text" name="name" id="nameInput" placeholder="Ketik nama media..." autofocus
                     autocomplete="off"
                     style="flex:1;padding:14px;background:#1d1d1d;border:2px solid #555;border-radius:8px;color:white;font-size:16px;">
@@ -78,10 +78,16 @@
                     Cari
                 </button>
             </div>
+
+            <div style="display:flex;gap:10px;">
+                <input type="text" name="barcode" id="barcodeInput" placeholder="Atau ketik kode barcode 8 karakter..."
+                    autocomplete="off"
+                    style="flex:1;padding:14px;background:#1d1d1d;border:2px solid #555;border-radius:8px;color:white;font-size:16px;letter-spacing:3px;text-transform:uppercase;">
+            </div>
         </form>
 
         <p style="color:#888;font-size:13px;margin-top:10px;">
-            💡 Ketik nama media (atau nama lengkap) untuk mencari dan menandai kehadiran.
+            💡 Cari berdasarkan nama media, nama lengkap, atau kode barcode 8 karakter.
         </p>
 
     </div>
