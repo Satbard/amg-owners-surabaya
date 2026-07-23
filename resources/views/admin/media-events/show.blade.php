@@ -72,11 +72,14 @@
                                     <td style="padding:8px;">
                                         @if ($att->status == 'hadir')
                                             <span
-                                                style="background:#2e7d32;padding:4px 8px;border-radius:10px;font-size:12px;">Hadir</span>
+                                                style="background:#2e7d32;padding:4px 8px;border-radius:10px;font-size:12px;white-space:nowrap;">
+                                                ✅ Hadir
+                                            </span>
                                         @else
                                             <span
-                                                style="background:#555;padding:4px 8px;border-radius:10px;font-size:12px;">Tidak
-                                                Hadir</span>
+                                                style="background:#555;padding:4px 8px;border-radius:10px;font-size:12px;white-space:nowrap;">
+                                                ❌ Tidak Hadir
+                                            </span>
                                         @endif
                                     </td>
                                 </tr>

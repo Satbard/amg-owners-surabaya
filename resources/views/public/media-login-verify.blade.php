@@ -41,31 +41,21 @@
                 Masukkan kode 6 digit yang telah dikirim ke email Anda
             </p>
 
-            <div
-                style="
-                background:#1d1d1d;
-                border:1px solid #f9a825;
-                border-radius:8px;
-                padding:12px 16px;
-                margin-bottom:20px;
-                font-size:13px;
-                color:#f9a825;
-            ">
-                📧 Kode OTP dikirim ke email Anda. Jika tidak menerima email,
-                silakan periksa folder <strong>Spam</strong> atau klik
-                <strong>Kirim Ulang OTP</strong> di bawah.
-            </div>
-
             @if (session('success'))
                 <div
                     style="
-                    background:#2e7d32;
-                    padding:12px 16px;
+                    background:#1d1d1d;
+                    border:1px solid #f9a825;
                     border-radius:8px;
+                    padding:14px 16px;
                     margin-bottom:20px;
-                    font-size:14px;
+                    font-size:13px;
+                    color:#f9a825;
+                    line-height:1.6;
                 ">
-                    {{ session('success') }}
+                    📧 {{ session('success') }} Silahkan
+                    periksa folder <strong>Spam</strong> atau klik
+                    <strong>Kirim Ulang OTP</strong> di bawah jika belum menerima.
                 </div>
             @endif
 
