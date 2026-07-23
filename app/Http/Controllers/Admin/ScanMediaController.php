@@ -16,12 +16,39 @@ class ScanMediaController extends Controller
 
     public function lookup(Request $request)
     {
+        // Search by name
+        if ($request->filled('name')) {
+            $keyword = trim($request->name);
+
+            $media = MediaRegistration::where('status', 'Approved')
+                ->where(function ($q) use ($keyword) {
+                    $q->where('media_name', 'LIKE', "%{$keyword}%")
+                        ->orWhere('full_name', 'LIKE', "%{$keyword}%");
+                })
+                ->orderBy('media_name')
+                ->get();
+
+            if ($media->isEmpty()) {
+                return redirect()
+                    ->back()
+                    ->with('error', "Media dengan nama \"{$keyword}\" tidak ditemukan.");
+            }
+
+            if ($media->count() === 1) {
+                return view('admin.scan-media.result', ['media' => $media->first()]);
+            }
+
+            // Multiple results — show selection
+            return view('admin.scan-media.select', compact('media'));
+        }
+
+        // Search by barcode
         $input = trim($request->input('barcode', ''));
 
         if (empty($input)) {
             return redirect()
                 ->back()
-                ->with('error', 'Silakan masukkan atau scan barcode media.');
+                ->with('error', 'Silakan masukkan barcode atau nama media.');
         }
 
         // Only find Approved media
@@ -48,7 +75,7 @@ class ScanMediaController extends Controller
 
         ActivityLog::create([
             'user_id' => auth()->id(),
-            'activity' => 'Scan barcode media: '.$media->full_name.
+            'activity' => 'Scan media: '.$media->full_name.
                 ' ('.$media->media_name.') — hadir',
             'ip_address' => $request->ip(),
         ]);

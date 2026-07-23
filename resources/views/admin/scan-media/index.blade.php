@@ -32,13 +32,13 @@
         </div>
     @endif
 
-    {{-- Tab: Manual Input / Camera --}}
+    {{-- Tab: Nama / Barcode / Camera --}}
     <div style="
         display:flex;
         gap:10px;
         margin-bottom:20px;
     ">
-        <button id="tabManualBtn" onclick="switchTab('manual')"
+        <button id="tabNameBtn" onclick="switchTab('name')"
             style="
             padding:10px 20px;
             background:#00e5ff;
@@ -48,7 +48,20 @@
             font-weight:bold;
             cursor:pointer;
         ">
-            ⌨️ Input Manual
+            👤 Cari Nama
+        </button>
+
+        <button id="tabBarcodeBtn" onclick="switchTab('barcode')"
+            style="
+            padding:10px 20px;
+            background:#333;
+            color:white;
+            border:none;
+            border-radius:8px;
+            font-weight:bold;
+            cursor:pointer;
+        ">
+            ⌨️ Input Barcode
         </button>
 
         <button id="tabCameraBtn" onclick="switchTab('camera')"
@@ -61,12 +74,60 @@
             font-weight:bold;
             cursor:pointer;
         ">
-            📷 Scan dengan Kamera
+            📷 Scan Kamera
         </button>
     </div>
 
-    {{-- Panel: Manual Input --}}
-    <div id="manualPanel" class="card" style="max-width:600px;margin-bottom:30px;">
+    {{-- Panel: Cari Nama --}}
+    <div id="namePanel" class="card" style="max-width:600px;margin-bottom:30px;">
+
+        <h3 style="margin-bottom:15px;">
+            Cari Media Berdasarkan Nama
+        </h3>
+
+        <form method="POST" action="/admin/scan-media/lookup">
+
+            @csrf
+
+            <div style="display:flex;gap:10px;">
+
+                <input type="text" name="name" id="nameInput" placeholder="Ketik nama media atau nama lengkap..."
+                    autofocus autocomplete="off"
+                    style="
+                    flex:1;
+                    padding:14px;
+                    background:#1d1d1d;
+                    border:2px solid #555;
+                    border-radius:8px;
+                    color:white;
+                    font-size:16px;
+                ">
+
+                <button type="submit"
+                    style="
+                    padding:14px 24px;
+                    background:#00e5ff;
+                    color:black;
+                    border:none;
+                    border-radius:8px;
+                    font-weight:bold;
+                    cursor:pointer;
+                ">
+                    Cari
+                </button>
+
+            </div>
+
+        </form>
+
+        <p style="color:#888;font-size:13px;margin-top:10px;">
+            💡 Cari berdasarkan nama media atau nama lengkap pendaftar.
+        </p>
+
+    </div>
+
+    {{-- Panel: Input Barcode --}}
+    <div id="barcodePanel" class="card" style="max-width:600px;margin-bottom:30px;display:none;">
 
         <h3 style="margin-bottom:15px;">
             Masukkan Barcode Media
@@ -79,7 +140,7 @@
             <div style="display:flex;gap:10px;">
 
                 <input type="text" name="barcode" id="barcodeInput" placeholder="Ketik atau scan barcode media..."
-                    autofocus autocomplete="off"
+                    autocomplete="off"
                     style="
                     flex:1;
                     padding:14px;
@@ -242,26 +303,38 @@
         let isScannerRunning = false;
 
         function switchTab(tab) {
-            const manualPanel = document.getElementById('manualPanel');
+            const namePanel = document.getElementById('namePanel');
+            const barcodePanel = document.getElementById('barcodePanel');
             const cameraPanel = document.getElementById('cameraPanel');
-            const manualBtn = document.getElementById('tabManualBtn');
+            const nameBtn = document.getElementById('tabNameBtn');
+            const barcodeBtn = document.getElementById('tabBarcodeBtn');
             const cameraBtn = document.getElementById('tabCameraBtn');
 
-            if (tab === 'manual') {
-                manualPanel.style.display = 'block';
-                cameraPanel.style.display = 'none';
-                manualBtn.style.background = '#00e5ff';
-                manualBtn.style.color = 'black';
-                cameraBtn.style.background = '#333';
-                cameraBtn.style.color = 'white';
-                stopScanner();
+            // Reset all
+            namePanel.style.display = 'none';
+            barcodePanel.style.display = 'none';
+            cameraPanel.style.display = 'none';
+            nameBtn.style.background = '#333';
+            nameBtn.style.color = 'white';
+            barcodeBtn.style.background = '#333';
+            barcodeBtn.style.color = 'white';
+            cameraBtn.style.background = '#333';
+            cameraBtn.style.color = 'white';
+            stopScanner();
+
+            if (tab === 'name') {
+                namePanel.style.display = 'block';
+                nameBtn.style.background = '#00e5ff';
+                nameBtn.style.color = 'black';
+                document.getElementById('nameInput').focus();
+            } else if (tab === 'barcode') {
+                barcodePanel.style.display = 'block';
+                barcodeBtn.style.background = '#00e5ff';
+                barcodeBtn.style.color = 'black';
             } else {
-                manualPanel.style.display = 'none';
                 cameraPanel.style.display = 'block';
                 cameraBtn.style.background = '#00e5ff';
                 cameraBtn.style.color = 'black';
-                manualBtn.style.background = '#333';
-                manualBtn.style.color = 'white';
             }
         }
 
@@ -362,9 +435,15 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const input = document.getElementById('barcodeInput');
-            if (input) {
-                input.focus();
+            const nameInput = document.getElementById('nameInput');
+            if (nameInput) {
+                nameInput.focus();
+                nameInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.form.submit();
+                    }
+                });
             }
         });
     </script>
