@@ -23,7 +23,7 @@
         }
 
         .header {
-            background: #111;
+            background: #0a0a0a;
             color: #00e5ff;
             padding: 25px;
             text-align: center;
@@ -32,6 +32,14 @@
         .header h1 {
             margin: 0;
             font-size: 20px;
+            color: #00e5ff;
+        }
+
+        .header .brand {
+            color: #ffffff;
+            font-size: 13px;
+            margin-top: 5px;
+            opacity: 0.7;
         }
 
         .body {
@@ -40,24 +48,43 @@
             color: #333;
         }
 
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
         .otp-code {
-            font-size: 36px;
-            letter-spacing: 8px;
+            font-size: 38px;
+            letter-spacing: 10px;
             font-weight: bold;
-            color: #111;
+            color: #0a0a0a;
             background: #f0f0f0;
-            padding: 15px 25px;
-            border-radius: 8px;
+            padding: 18px 30px;
+            border-radius: 10px;
             display: inline-block;
             margin: 20px 0;
         }
 
-        .footer {
-            padding: 20px;
-            background: #f5f5f5;
-            text-align: center;
-            font-size: 13px;
+        .info-text {
+            font-size: 14px;
             color: #888;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            padding: 20px 30px;
+            background: #f9f9f9;
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .footer a {
+            color: #00e5ff;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -65,22 +92,27 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Media Login – Kode Verifikasi</h1>
+            <h1>Kode Verifikasi</h1>
+            <div class="brand">AMG Owners Surabaya — Media Dashboard</div>
         </div>
 
         <div class="body">
-            <p>Halo <strong>{{ $registration->full_name }}</strong>,</p>
-            <p>Gunakan kode OTP berikut untuk masuk ke dashboard media Anda:</p>
+            <div class="greeting">Halo <strong>{{ $registration->full_name }}</strong>,</div>
+
+            <p style="color:#666;">Masukkan kode berikut untuk mengakses dashboard media Anda:</p>
 
             <div class="otp-code">{{ $otp }}</div>
 
-            <p style="font-size:13px;color:#888;margin-top:20px;">
-                Kode ini berlaku selama 10 menit. Jangan bagikan kode ini kepada siapa pun.
+            <p class="info-text">
+                Kode ini berlaku selama <strong>10 menit</strong>.<br>
+                Jika Anda tidak meminta kode ini, abaikan email ini.
             </p>
         </div>
 
         <div class="footer">
-            &copy; {{ date('Y') }} AMG Owners Surabaya. All Rights Reserved.
+            &copy; {{ date('Y') }} AMG Owners Surabaya. All Rights Reserved.<br>
+            Jl. Demak No.166-168, Gundih, Kec. Bubutan, Surabaya, Jawa Timur 60172<br>
+            <a href="{{ url('/media-login') }}">Media Login</a>
         </div>
     </div>
 </body>

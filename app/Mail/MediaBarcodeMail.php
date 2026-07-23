@@ -19,6 +19,8 @@ class MediaBarcodeMail extends Mailable
 
     public string $barcodeBase64;
 
+    public string $barcodeCid;
+
     /**
      * Create a new message instance.
      */
@@ -31,6 +33,7 @@ class MediaBarcodeMail extends Mailable
         $generator = new BarcodeGeneratorPNG;
         $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128, 2, 50);
         $this->barcodeBase64 = base64_encode($barcodeData);
+        $this->barcodeCid = 'barcode-'.$registration->id.'@amg';
     }
 
     /**
@@ -55,11 +58,26 @@ class MediaBarcodeMail extends Mailable
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array<int, Attachment>
      */
     public function attachments(): array
     {
-        return [];
+        $barcodeContent = $this->registration->barcode_token;
+        $generator = new BarcodeGeneratorPNG;
+        $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128, 2, 50);
+
+        return [
+            Attachment::fromData(
+                fn () => $barcodeData,
+                'barcode-'.$this->registration->id.'.png'
+            )->as('barcode.png')->withMime('image/png'),
+        ];
+    }
+
+    /**
+     * Build the message with embedded barcode.
+     */
+    public function build()
+    {
+        return $this->view('emails.media-barcode');
     }
 }

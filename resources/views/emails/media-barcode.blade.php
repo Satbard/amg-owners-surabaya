@@ -118,9 +118,14 @@
             <p>Terima kasih telah mendaftarkan media Anda. Berikut adalah barcode unik untuk registrasi media Anda:</p>
 
             <div class="barcode-section">
-                <div class="barcode-label">Scan barcode ini untuk absensi</div>
-                <img src="data:image/png;base64,{{ $barcodeBase64 }}" alt="Barcode {{ $registration->barcode_token }}">
-                <div class="barcode-token">{{ $registration->barcode_token }}</div>
+                <div class="barcode-label">Gunakan kode berikut untuk absensi</div>
+                <div class="barcode-token" style="font-size:32px;letter-spacing:8px;">{{ $registration->barcode_token }}
+                </div>
+                <div style="margin-top:15px;">
+                    <img src="data:image/png;base64,{{ $barcodeBase64 }}"
+                        alt="Barcode {{ $registration->barcode_token }}"
+                        style="max-width:280px;width:100%;height:auto;">
+                </div>
             </div>
 
             <table class="info-table">
