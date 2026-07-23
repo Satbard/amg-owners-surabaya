@@ -31,28 +31,8 @@ class MediaBarcodeMail extends Mailable
         $generator = new BarcodeGeneratorPNG;
         $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128, 2, 50);
 
-        // Add white background to barcode
-        $barcodeImg = imagecreatefromstring($barcodeData);
-        $width = imagesx($barcodeImg);
-        $height = imagesy($barcodeImg);
-        $padding = 15;
-        $canvasW = $width + ($padding * 2);
-        $canvasH = $height + ($padding * 2);
-        $canvas = imagecreatetruecolor($canvasW, $canvasH);
-        $white = imagecolorallocate($canvas, 255, 255, 255);
-        imagefill($canvas, 0, 0, $white);
-        imagecopy($canvas, $barcodeImg, $padding, $padding, 0, 0, $width, $height);
-
-        // Get PNG data from canvas
-        ob_start();
-        imagepng($canvas);
-        $pngData = ob_get_clean();
-
-        imagedestroy($barcodeImg);
-        imagedestroy($canvas);
-
-        // Embed as inline attachment and get CID
-        $barcodeCid = $this->embedData($pngData, 'barcode.png', 'image/png');
+        // Embed as inline attachment
+        $barcodeCid = $this->embedData($barcodeData, 'barcode.png', 'image/png');
 
         return $this->view('emails.media-barcode')
             ->subject('Barcode Media Registration – '.$this->registration->media_name)

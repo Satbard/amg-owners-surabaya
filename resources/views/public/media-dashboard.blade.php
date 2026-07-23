@@ -52,6 +52,19 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div
+                    style="
+                    background:#c62828;
+                    padding:12px 16px;
+                    border-radius:8px;
+                    margin-bottom:20px;
+                    font-size:14px;
+                ">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             {{-- Status Card --}}
             <div class="card" style="margin-bottom:20px;">
 
