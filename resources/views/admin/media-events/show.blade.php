@@ -15,30 +15,41 @@
         <div class="card">
             <h2 style="color:#00e5ff;margin-bottom:20px;">Informasi Acara</h2>
 
-            <p><strong>Tanggal:</strong><br>
-                {{ $mediaEvent->event_date->format('d M Y H:i') }}
-            </p>
+            <table style="width:100%;border-collapse:collapse;">
+                <tr>
+                    <td style="padding:8px 12px;color:#aaa;width:30%;vertical-align:top;">Tanggal</td>
+                    <td style="padding:8px 12px;">{{ $mediaEvent->event_date->format('d M Y H:i') }}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px 12px;color:#aaa;vertical-align:top;">Lokasi</td>
+                    <td style="padding:8px 12px;">{{ $mediaEvent->location ?: '-' }}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px 12px;color:#aaa;vertical-align:top;">Deskripsi</td>
+                    <td style="padding:8px 12px;">{{ $mediaEvent->description ?: '-' }}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px 12px;color:#aaa;vertical-align:top;">Status</td>
+                    <td style="padding:8px 12px;">
+                        @if ($mediaEvent->status == 'upcoming')
+                            <span
+                                style="display:inline-block;background:#1976d2;padding:4px 12px;border-radius:12px;font-size:13px;">Upcoming</span>
+                        @elseif($mediaEvent->status == 'ongoing')
+                            <span
+                                style="display:inline-block;background:#f9a825;color:black;padding:4px 12px;border-radius:12px;font-size:13px;">Ongoing</span>
+                        @elseif($mediaEvent->status == 'completed')
+                            <span
+                                style="display:inline-block;background:#2e7d32;padding:4px 12px;border-radius:12px;font-size:13px;">Completed</span>
+                        @else
+                            <span
+                                style="display:inline-block;background:#c62828;padding:4px 12px;border-radius:12px;font-size:13px;">Cancelled</span>
+                        @endif
+                    </td>
+                </tr>
+            </table>
+
             <br>
-            <p><strong>Lokasi:</strong><br>
-                {{ $mediaEvent->location ?: '-' }}
-            </p>
-            <br>
-            <p><strong>Deskripsi:</strong><br>
-                {{ $mediaEvent->description ?: '-' }}
-            </p>
-            <br>
-            <p><strong>Status:</strong><br>
-                @if ($mediaEvent->status == 'upcoming')
-                    <span style="background:#1976d2;padding:6px 12px;border-radius:12px;">Upcoming</span>
-                @elseif($mediaEvent->status == 'ongoing')
-                    <span style="background:#f9a825;color:black;padding:6px 12px;border-radius:12px;">Ongoing</span>
-                @elseif($mediaEvent->status == 'completed')
-                    <span style="background:#2e7d32;padding:6px 12px;border-radius:12px;">Completed</span>
-                @else
-                    <span style="background:#c62828;padding:6px 12px;border-radius:12px;">Cancelled</span>
-                @endif
-            </p>
-            <br>
+
             <a href="/admin/media-events/{{ $mediaEvent->id }}/edit"
                 style="display:inline-block;padding:12px 20px;background:#00e5ff;color:black;border-radius:8px;font-weight:bold;text-decoration:none;">
                 Edit Acara
@@ -48,7 +59,7 @@
         <div class="card">
             <h2 style="color:#00e5ff;margin-bottom:20px;">
                 Media Terdaftar
-                <span style="color:#aaa;font-size:14px;">
+                <span style="color:#aaa;font-size:14px;font-weight:normal;">
                     ({{ $mediaEvent->attendances->where('status', 'hadir')->count() }}
                     /{{ $mediaEvent->attendances->count() }} hadir)
                 </span>
@@ -58,26 +69,27 @@
                 <div style="overflow-x:auto;">
                     <table style="width:100%;border-collapse:collapse;">
                         <thead>
-                            <tr style="background:#1d1d1d;">
-                                <th style="padding:8px;">Nama</th>
-                                <th style="padding:8px;">Media</th>
-                                <th style="padding:8px;">Status</th>
+                            <tr style="background:#1d1d1d;border-bottom:2px solid #333;">
+                                <th style="padding:10px 12px;text-align:left;font-size:13px;color:#aaa;">Nama</th>
+                                <th style="padding:10px 12px;text-align:left;font-size:13px;color:#aaa;">Media</th>
+                                <th style="padding:10px 12px;text-align:center;font-size:13px;color:#aaa;">Kehadiran</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($mediaEvent->attendances as $att)
-                                <tr style="border-top:1px solid #222;">
-                                    <td style="padding:8px;">{{ $att->mediaRegistration->full_name }}</td>
-                                    <td style="padding:8px;">{{ $att->mediaRegistration->media_name }}</td>
-                                    <td style="padding:8px;">
+                                <tr style="border-bottom:1px solid #222;">
+                                    <td style="padding:10px 12px;">{{ $att->mediaRegistration->full_name }}</td>
+                                    <td style="padding:10px 12px;color:#00e5ff;">{{ $att->mediaRegistration->media_name }}
+                                    </td>
+                                    <td style="padding:10px 12px;text-align:center;">
                                         @if ($att->status == 'hadir')
                                             <span
-                                                style="background:#2e7d32;padding:4px 8px;border-radius:10px;font-size:12px;white-space:nowrap;">
+                                                style="display:inline-block;background:#2e7d32;padding:4px 12px;border-radius:10px;font-size:12px;font-weight:bold;">
                                                 ✅ Hadir
                                             </span>
                                         @else
                                             <span
-                                                style="background:#555;padding:4px 8px;border-radius:10px;font-size:12px;white-space:nowrap;">
+                                                style="display:inline-block;background:#444;padding:4px 12px;border-radius:10px;font-size:12px;">
                                                 ❌ Tidak Hadir
                                             </span>
                                         @endif
