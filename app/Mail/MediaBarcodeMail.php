@@ -4,7 +4,10 @@ namespace App\Mail;
 
 use App\Models\MediaRegistration;
 use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Attachment;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 
@@ -14,28 +17,48 @@ class MediaBarcodeMail extends Mailable
 
     public MediaRegistration $registration;
 
-    public string $barcodeBase64;
-
     /**
      * Create a new message instance.
      */
     public function __construct(MediaRegistration $registration)
     {
         $this->registration = $registration;
-
-        // Generate barcode and encode as base64 in constructor
-        $barcodeContent = $registration->barcode_token;
-        $generator = new BarcodeGeneratorPNG;
-        $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128, 2, 50);
-        $this->barcodeBase64 = base64_encode($barcodeData);
     }
 
     /**
-     * Build the message.
+     * Get the message envelope.
      */
-    public function build(): static
+    public function envelope(): Envelope
     {
-        return $this->view('emails.media-barcode')
-            ->subject('Barcode Media Registration – '.$this->registration->media_name);
+        return new Envelope(
+            subject: 'Barcode Media Registration – '.$this->registration->media_name,
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.media-barcode',
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     */
+    public function attachments(): array
+    {
+        $barcodeContent = $this->registration->barcode_token;
+        $generator = new BarcodeGeneratorPNG;
+        $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128, 2, 50);
+
+        return [
+            Attachment::fromData(
+                fn () => $barcodeData,
+                'barcode-'.$this->registration->id.'.png'
+            )->withMime('image/png'),
+        ];
     }
 }

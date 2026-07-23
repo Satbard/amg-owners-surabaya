@@ -122,11 +122,9 @@
                 <div class="barcode-token" style="font-size:32px;letter-spacing:8px;color:#111;">
                     {{ $registration->barcode_token }}
                 </div>
-                <div style="margin-top:15px;background:#ffffff;display:inline-block;padding:10px;border-radius:4px;">
-                    <img src="data:image/png;base64,{{ $barcodeBase64 }}"
-                        alt="Barcode {{ $registration->barcode_token }}"
-                        style="max-width:280px;width:100%;height:auto;display:block;background:#ffffff;">
-                </div>
+                <p style="color:#666;font-size:13px;margin-top:15px;">
+                    File gambar barcode terlampir sebagai attachment di email ini.
+                </p>
             </div>
 
             <table class="info-table">
