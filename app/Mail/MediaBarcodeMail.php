@@ -54,10 +54,25 @@ class MediaBarcodeMail extends Mailable
         $generator = new BarcodeGeneratorPNG;
         $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128, 2, 50);
 
+        // Add white background using GD
+        $img = imagecreatefromstring($barcodeData);
+        $w = imagesx($img);
+        $h = imagesy($img);
+        $pad = 15;
+        $canvas = imagecreatetruecolor($w + ($pad * 2), $h + ($pad * 2));
+        imagefill($canvas, 0, 0, imagecolorallocate($canvas, 255, 255, 255));
+        imagecopy($canvas, $img, $pad, $pad, 0, 0, $w, $h);
+
+        ob_start();
+        imagepng($canvas);
+        $pngData = ob_get_clean();
+        imagedestroy($img);
+        imagedestroy($canvas);
+
         return [
             Attachment::fromData(
-                fn () => $barcodeData,
-                'barcode-'.$this->registration->id.'.png'
+                fn () => $pngData,
+                'barcode-media-'.$this->registration->id.'.png'
             )->withMime('image/png'),
         ];
     }
