@@ -17,8 +17,6 @@ class MediaBarcodeMail extends Mailable
 
     public MediaRegistration $registration;
 
-    public string $barcodeBase64;
-
     public string $barcodeCid;
 
     /**
@@ -27,13 +25,6 @@ class MediaBarcodeMail extends Mailable
     public function __construct(MediaRegistration $registration)
     {
         $this->registration = $registration;
-
-        // Generate barcode image inline
-        $barcodeContent = $registration->barcode_token;
-        $generator = new BarcodeGeneratorPNG;
-        $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128, 2, 50);
-        $this->barcodeBase64 = base64_encode($barcodeData);
-        $this->barcodeCid = 'barcode-'.$registration->id.'@amg';
     }
 
     /**
@@ -53,7 +44,45 @@ class MediaBarcodeMail extends Mailable
     {
         return new Content(
             view: 'emails.media-barcode',
+            with: [
+                'barcodeCid' => $this->barcodeCid,
+            ],
         );
+    }
+
+    /**
+     * Build the message.
+     */
+    public function build(): static
+    {
+        $barcodeContent = $this->registration->barcode_token;
+        $generator = new BarcodeGeneratorPNG;
+        $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128, 2, 50);
+
+        // Add white background to barcode
+        $barcodeImg = imagecreatefromstring($barcodeData);
+        $width = imagesx($barcodeImg);
+        $height = imagesy($barcodeImg);
+        $padding = 15;
+        $canvasW = $width + ($padding * 2);
+        $canvasH = $height + ($padding * 2);
+        $canvas = imagecreatetruecolor($canvasW, $canvasH);
+        $white = imagecolorallocate($canvas, 255, 255, 255);
+        imagefill($canvas, 0, 0, $white);
+        imagecopy($canvas, $barcodeImg, $padding, $padding, 0, 0, $width, $height);
+
+        // Get PNG data from canvas
+        ob_start();
+        imagepng($canvas);
+        $pngData = ob_get_clean();
+
+        imagedestroy($barcodeImg);
+        imagedestroy($canvas);
+
+        // Embed as inline attachment
+        $this->barcodeCid = $this->embedData($pngData, 'barcode.png', 'image/png');
+
+        return $this;
     }
 
     /**
@@ -61,23 +90,6 @@ class MediaBarcodeMail extends Mailable
      */
     public function attachments(): array
     {
-        $barcodeContent = $this->registration->barcode_token;
-        $generator = new BarcodeGeneratorPNG;
-        $barcodeData = $generator->getBarcode($barcodeContent, $generator::TYPE_CODE_128, 2, 50);
-
-        return [
-            Attachment::fromData(
-                fn () => $barcodeData,
-                'barcode-'.$this->registration->id.'.png'
-            )->as('barcode.png')->withMime('image/png'),
-        ];
-    }
-
-    /**
-     * Build the message with embedded barcode.
-     */
-    public function build()
-    {
-        return $this->view('emails.media-barcode');
+        return [];
     }
 }
