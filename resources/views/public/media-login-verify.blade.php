@@ -103,10 +103,27 @@
                 </button>
             </form>
 
+            <form method="POST" action="/media-login/resend-otp" style="margin-top:15px;">
+                @csrf
+                <button type="submit"
+                    style="
+                    width:100%;
+                    padding:12px;
+                    background:#333;
+                    color:white;
+                    border:1px solid #555;
+                    border-radius:8px;
+                    font-size:14px;
+                    cursor:pointer;
+                ">
+                    🔄 Kirim Ulang OTP
+                </button>
+            </form>
+
             <p
                 style="
                 text-align:center;
-                margin-top:20px;
+                margin-top:15px;
                 font-size:13px;
                 color:#888;
             ">

@@ -43,6 +43,7 @@ Route::get('/media-login', [MediaAuthController::class, 'showLoginForm']);
 Route::post('/media-login', [MediaAuthController::class, 'sendOtp']);
 Route::get('/media-login/verify', [MediaAuthController::class, 'showVerifyForm']);
 Route::post('/media-login/verify', [MediaAuthController::class, 'verifyOtp']);
+Route::post('/media-login/resend-otp', [MediaAuthController::class, 'resendOtp']);
 Route::get('/media-dashboard', [MediaAuthController::class, 'dashboard'])->middleware('media.auth');
 Route::post('/media-dashboard/resend-barcode', [MediaAuthController::class, 'resendBarcode'])->middleware('media.auth');
 Route::post('/media-logout', [MediaAuthController::class, 'logout']);

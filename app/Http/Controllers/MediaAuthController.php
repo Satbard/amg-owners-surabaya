@@ -55,6 +55,43 @@ class MediaAuthController extends Controller
             ->with('success', 'Kode OTP telah dikirim ke email Anda.');
     }
 
+    public function resendOtp()
+    {
+        $email = session('media_login_email');
+
+        if (! $email) {
+            return redirect('/media-login')
+                ->with('error', 'Sesi telah berakhir. Silakan masukkan email lagi.');
+        }
+
+        $registration = MediaRegistration::where('email', $email)->first();
+
+        if (! $registration) {
+            return redirect('/media-login')
+                ->with('error', 'Data tidak ditemukan.');
+        }
+
+        // Generate new 6-digit OTP
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        // Save new OTP
+        MediaOtp::create([
+            'media_registration_id' => $registration->id,
+            'otp' => $otp,
+            'expires_at' => Carbon::now()->addMinutes(10),
+        ]);
+
+        // Send OTP email
+        try {
+            Mail::to($registration->email)->send(new MediaOtpMail($registration, $otp));
+        } catch (\Throwable $e) {
+            Log::warning('Failed to resend OTP email: '.$e->getMessage());
+        }
+
+        return redirect('/media-login/verify')
+            ->with('success', 'Kode OTP baru telah dikirim ke email Anda.');
+    }
+
     public function showVerifyForm()
     {
         if (! session()->has('media_login_email')) {
