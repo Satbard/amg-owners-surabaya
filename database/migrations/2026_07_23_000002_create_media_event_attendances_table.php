@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('status', ['hadir', 'tidak_hadir'])->default('tidak_hadir');
             $table->dateTime('scanned_at')->nullable();
             $table->timestamps();
-            $table->unique(['media_event_id', 'media_registration_id']);
+            $table->unique(['media_event_id', 'media_registration_id'], 'mea_unique');
         });
     }
 
