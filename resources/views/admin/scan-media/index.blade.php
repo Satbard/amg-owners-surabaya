@@ -82,7 +82,7 @@
             <div style="display:flex;gap:10px;">
                 <input type="text" name="barcode" id="barcodeInput" placeholder="Atau ketik kode barcode 8 karakter..."
                     autocomplete="off"
-                    style="flex:1;padding:14px;background:#1d1d1d;border:2px solid #555;border-radius:8px;color:white;font-size:16px;letter-spacing:3px;">
+                    style="flex:1;padding:14px;background:#1d1d1d;border:2px solid #555;border-radius:8px;color:white;font-size:16px;">
                 <button type="submit"
                     style="padding:14px 24px;background:#7c4dff;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
                     Cari Barcode
