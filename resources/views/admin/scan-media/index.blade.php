@@ -19,30 +19,23 @@
     <h1 style="margin-bottom:10px;">Scan Barcode Media</h1>
 
     <p style="color:#aaa;margin-bottom:30px;">
-        Scan atau masukkan barcode media untuk menandai kehadiran.
+        Cari media berdasarkan nama atau scan barcode untuk menandai kehadiran.
         Hanya media dengan status <strong>Approved</strong> yang dapat di-scan.
+        @if (!$preselectedEventId)
+            Cari atau scan dulu, lalu pilih acara.
+        @else
+            Pencarian akan langsung menandai hadir untuk acara yang dipilih.
+        @endif
     </p>
 
     @if (session('success'))
-        <div
-            style="
-            background:#2e7d32;
-            padding:12px 16px;
-            border-radius:8px;
-            margin-bottom:20px;
-        ">
+        <div style="background:#2e7d32;padding:12px 16px;border-radius:8px;margin-bottom:20px;">
             {{ session('success') }}
         </div>
     @endif
 
     @if (session('error'))
-        <div
-            style="
-            background:#c62828;
-            padding:12px 16px;
-            border-radius:8px;
-            margin-bottom:20px;
-        ">
+        <div style="background:#c62828;padding:12px 16px;border-radius:8px;margin-bottom:20px;">
             {{ session('error') }}
         </div>
     @endif
@@ -53,154 +46,42 @@
         </div>
     @endif
 
-    {{-- Tab: Nama / Barcode / Camera --}}
-    <div style="
-        display:flex;
-        gap:10px;
-        margin-bottom:20px;
-    ">
-        <button id="tabNameBtn" onclick="switchTab('name')"
-            style="
-            padding:10px 20px;
-            background:#00e5ff;
-            color:black;
-            border:none;
-            border-radius:8px;
-            font-weight:bold;
-            cursor:pointer;
-        ">
-            👤 Cari Nama
+    {{-- Tab: Manual Input / Camera --}}
+    <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <button id="tabManualBtn" onclick="switchTab('manual')"
+            style="padding:10px 20px;background:#00e5ff;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
+            ⌨️ Input Manual
         </button>
-
-        <button id="tabBarcodeBtn" onclick="switchTab('barcode')"
-            style="
-            padding:10px 20px;
-            background:#333;
-            color:white;
-            border:none;
-            border-radius:8px;
-            font-weight:bold;
-            cursor:pointer;
-        ">
-            ⌨️ Input Barcode
-        </button>
-
         <button id="tabCameraBtn" onclick="switchTab('camera')"
-            style="
-            padding:10px 20px;
-            background:#333;
-            color:white;
-            border:none;
-            border-radius:8px;
-            font-weight:bold;
-            cursor:pointer;
-        ">
-            📷 Scan Kamera
+            style="padding:10px 20px;background:#333;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
+            📷 Scan dengan Kamera
         </button>
     </div>
 
-    {{-- Panel: Cari Nama --}}
-    <div id="namePanel" class="card" style="max-width:600px;margin-bottom:30px;">
+    {{-- Panel: Manual Input --}}
+    <div id="manualPanel" class="card" style="max-width:600px;margin-bottom:30px;">
 
-        <h3 style="margin-bottom:15px;">
-            Cari Media Berdasarkan Nama
-        </h3>
+        <h3 style="margin-bottom:15px;">Cari Media Berdasarkan Nama</h3>
 
-        <form method="POST" action="/admin/scan-media/lookup">
-
+        <form method="POST" action="/admin/scan-media/lookup" id="scanForm">
             @csrf
-
             @if ($preselectedEventId)
                 <input type="hidden" name="media_event_id" value="{{ $preselectedEventId }}">
             @endif
 
             <div style="display:flex;gap:10px;">
-
-                <input type="text" name="name" id="nameInput" placeholder="Ketik nama media atau nama lengkap..."
-                    autofocus autocomplete="off"
-                    style="
-                    flex:1;
-                    padding:14px;
-                    background:#1d1d1d;
-                    border:2px solid #555;
-                    border-radius:8px;
-                    color:white;
-                    font-size:16px;
-                ">
-
-                <button type="submit"
-                    style="
-                    padding:14px 24px;
-                    background:#00e5ff;
-                    color:black;
-                    border:none;
-                    border-radius:8px;
-                    font-weight:bold;
-                    cursor:pointer;
-                ">
-                    Cari
-                </button>
-
-            </div>
-
-        </form>
-
-        <p style="color:#888;font-size:13px;margin-top:10px;">
-            💡 Cari berdasarkan nama media atau nama lengkap pendaftar.
-        </p>
-
-    </div>
-
-    {{-- Panel: Input Barcode --}}
-    <div id="barcodePanel" class="card" style="max-width:600px;margin-bottom:30px;display:none;">
-
-        <h3 style="margin-bottom:15px;">
-            Masukkan Barcode Media
-        </h3>
-
-        <form method="POST" action="/admin/scan-media/lookup">
-
-            @csrf
-
-            @if ($preselectedEventId)
-                <input type="hidden" name="media_event_id" value="{{ $preselectedEventId }}">
-            @endif
-
-            <div style="display:flex;gap:10px;">
-
-                <input type="text" name="barcode" id="barcodeInput" placeholder="Ketik atau scan barcode media..."
+                <input type="text" name="name" id="nameInput" placeholder="Ketik nama media..." autofocus
                     autocomplete="off"
-                    style="
-                    flex:1;
-                    padding:14px;
-                    background:#1d1d1d;
-                    border:2px solid #555;
-                    border-radius:8px;
-                    color:white;
-                    font-size:16px;
-                    letter-spacing:3px;
-                    text-transform:uppercase;
-                ">
-
+                    style="flex:1;padding:14px;background:#1d1d1d;border:2px solid #555;border-radius:8px;color:white;font-size:16px;">
                 <button type="submit"
-                    style="
-                    padding:14px 24px;
-                    background:#00e5ff;
-                    color:black;
-                    border:none;
-                    border-radius:8px;
-                    font-weight:bold;
-                    cursor:pointer;
-                ">
+                    style="padding:14px 24px;background:#00e5ff;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
                     Cari
                 </button>
-
             </div>
-
         </form>
 
         <p style="color:#888;font-size:13px;margin-top:10px;">
-            💡 Masukkan kode barcode 8 karakter yang tertera pada email pendaftaran media.
+            💡 Ketik nama media (atau nama lengkap) untuk mencari dan menandai kehadiran.
         </p>
 
     </div>
@@ -208,114 +89,45 @@
     {{-- Panel: Camera Scanner --}}
     <div id="cameraPanel" class="card" style="max-width:600px;margin-bottom:30px;display:none;">
 
-        <h3 style="margin-bottom:15px;">
-            Scan dengan Kamera
-        </h3>
+        <h3 style="margin-bottom:15px;">Scan dengan Kamera</h3>
 
-        <div
-            style="
-            position:relative;
-            background:#000;
-            border-radius:8px;
-            overflow:hidden;
-            min-height:300px;
-        ">
-
-            <div id="scannerContainer" style="
-                width:100%;
-                min-height:300px;
-            ">
-            </div>
-
+        <div style="position:relative;background:#000;border-radius:8px;overflow:hidden;min-height:300px;">
+            <div id="scannerContainer" style="width:100%;min-height:300px;"></div>
             <div id="scannerLoading"
-                style="
-                position:absolute;
-                top:50%;
-                left:50%;
-                transform:translate(-50%,-50%);
-                color:#888;
-                text-align:center;
-            ">
+                style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#888;text-align:center;">
                 <p style="font-size:40px;margin-bottom:10px;">📷</p>
                 <p>Mengakses kamera...</p>
-                <p style="font-size:13px;margin-top:5px;">
-                    Pastikan browser memiliki izin akses kamera
-                </p>
+                <p style="font-size:13px;margin-top:5px;">Pastikan browser memiliki izin akses kamera</p>
             </div>
-
         </div>
 
         <div id="scanResult" style="display:none;margin-top:15px;">
-
-            <div
-                style="
-                background:#1d1d1d;
-                padding:15px;
-                border-radius:8px;
-                border:2px solid #2e7d32;
-            ">
-
-                <p style="color:#4caf50;font-weight:bold;margin-bottom:8px;">
-                    ✅ Barcode Terdeteksi
-                </p>
-
+            <div style="background:#1d1d1d;padding:15px;border-radius:8px;border:2px solid #2e7d32;">
+                <p style="color:#4caf50;font-weight:bold;margin-bottom:8px;">✅ Barcode Terdeteksi</p>
                 <p style="font-size:24px;letter-spacing:3px;color:#00e5ff;font-weight:bold;" id="detectedCode"></p>
-
                 <form method="POST" action="/admin/scan-media/lookup" style="margin-top:15px;">
-
                     @csrf
-
+                    @if ($preselectedEventId)
+                        <input type="hidden" name="media_event_id" value="{{ $preselectedEventId }}">
+                    @endif
                     <input type="hidden" name="barcode" id="detectedCodeInput">
-
                     <button type="submit"
-                        style="
-                        padding:10px 20px;
-                        background:#2e7d32;
-                        color:white;
-                        border:none;
-                        border-radius:8px;
-                        font-weight:bold;
-                        cursor:pointer;
-                        width:100%;
-                    ">
+                        style="padding:10px 20px;background:#2e7d32;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;">
                         Konfirmasi & Cari Media
                     </button>
-
                 </form>
-
             </div>
-
         </div>
 
         <div style="margin-top:15px;display:flex;gap:10px;">
-
             <button id="startScannerBtn" onclick="startScanner()"
-                style="
-                padding:10px 20px;
-                background:#00e5ff;
-                color:black;
-                border:none;
-                border-radius:8px;
-                font-weight:bold;
-                cursor:pointer;
-            ">
+                style="padding:10px 20px;background:#00e5ff;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
                 ▶️ Mulai Kamera
             </button>
-
             <button id="stopScannerBtn" onclick="stopScanner()"
-                style="
-                display:none;
-                padding:10px 20px;
-                background:#c62828;
-                color:white;
-                border:none;
-                border-radius:8px;
-                font-weight:bold;
-                cursor:pointer;
-            ">
+                style="display:none;padding:10px 20px;background:#c62828;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
                 ⏹ Stop Kamera
             </button>
-
         </div>
 
         <p style="color:#888;font-size:13px;margin-top:10px;">
@@ -323,6 +135,41 @@
         </p>
 
     </div>
+
+    {{-- Quick Access: Active Events --}}
+    @if (!$preselectedEventId && $events->count())
+        <div class="card">
+            <h3 style="margin-bottom:15px;">Acara Media Aktif</h3>
+            <p style="color:#aaa;font-size:14px;margin-bottom:15px;">
+                Atau buka halaman scan untuk acara tertentu:
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;">
+                @foreach ($events as $event)
+                    <a href="/admin/scan-media?media_event_id={{ $event->id }}"
+                        style="padding:10px 16px;background:#1d1d1d;border:1px solid #333;border-radius:8px;color:white;text-decoration:none;">
+                        {{ $event->title }}
+                        <span style="color:#aaa;font-size:13px;">
+                            ({{ $event->event_date->format('d M') }})
+                        </span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    @if (!$preselectedEventId && !$events->count())
+        <div class="card" style="text-align:center;padding:40px;">
+            <h3 style="color:#aaa;">Belum Ada Acara Media Aktif</h3>
+            <p style="color:#666;margin-top:10px;">
+                Buat acara media terlebih dahulu untuk mulai scan barcode.
+            </p>
+            <br>
+            <a href="/admin/media-events/create"
+                style="display:inline-block;padding:12px 24px;background:#00e5ff;color:black;border-radius:8px;font-weight:bold;text-decoration:none;">
+                Buat Acara Baru
+            </a>
+        </div>
+    @endif
 
     {{-- html5-qrcode library --}}
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -332,38 +179,26 @@
         let isScannerRunning = false;
 
         function switchTab(tab) {
-            const namePanel = document.getElementById('namePanel');
-            const barcodePanel = document.getElementById('barcodePanel');
+            const manualPanel = document.getElementById('manualPanel');
             const cameraPanel = document.getElementById('cameraPanel');
-            const nameBtn = document.getElementById('tabNameBtn');
-            const barcodeBtn = document.getElementById('tabBarcodeBtn');
+            const manualBtn = document.getElementById('tabManualBtn');
             const cameraBtn = document.getElementById('tabCameraBtn');
 
-            // Reset all
-            namePanel.style.display = 'none';
-            barcodePanel.style.display = 'none';
-            cameraPanel.style.display = 'none';
-            nameBtn.style.background = '#333';
-            nameBtn.style.color = 'white';
-            barcodeBtn.style.background = '#333';
-            barcodeBtn.style.color = 'white';
-            cameraBtn.style.background = '#333';
-            cameraBtn.style.color = 'white';
-            stopScanner();
-
-            if (tab === 'name') {
-                namePanel.style.display = 'block';
-                nameBtn.style.background = '#00e5ff';
-                nameBtn.style.color = 'black';
-                document.getElementById('nameInput').focus();
-            } else if (tab === 'barcode') {
-                barcodePanel.style.display = 'block';
-                barcodeBtn.style.background = '#00e5ff';
-                barcodeBtn.style.color = 'black';
+            if (tab === 'manual') {
+                manualPanel.style.display = 'block';
+                cameraPanel.style.display = 'none';
+                manualBtn.style.background = '#00e5ff';
+                manualBtn.style.color = 'black';
+                cameraBtn.style.background = '#333';
+                cameraBtn.style.color = 'white';
+                stopScanner();
             } else {
+                manualPanel.style.display = 'none';
                 cameraPanel.style.display = 'block';
                 cameraBtn.style.background = '#00e5ff';
                 cameraBtn.style.color = 'black';
+                manualBtn.style.background = '#333';
+                manualBtn.style.color = 'white';
             }
         }
 
@@ -463,63 +298,24 @@
             document.getElementById('scanResult').style.display = 'none';
         }
 
-        {{-- Quick Access: Active Events --}}
-        @if (!$preselectedEventId && $events->count())
-            <
-            div class = "card"
-            style = "margin-top:20px;" >
-                <
-                h3 style = "margin-bottom:15px;" > Acara Media Aktif < /h3> <
-                p style = "color:#aaa;font-size:14px;margin-bottom:15px;" >
-                Atau buka halaman scan untuk acara tertentu:
-                <
-                /p> <
-                div style = "display:flex;flex-wrap:wrap;gap:10px;" >
-                @foreach ($events as $event)
-                    <
-                    a href = "/admin/scan-media?media_event_id={{ $event->id }}"
-                    style =
-                        "padding:10px 16px;background:#1d1d1d;border:1px solid #333;border-radius:8px;color:white;text-decoration:none;" >
-                        {{ $event->title }} <
-                        span style = "color:#aaa;font-size:13px;" >
-                        ({{ $event->event_date->format('d M') }}) <
-                        /span> <
-                        /a>
-                @endforeach <
-                /div> <
-                /div>
-        @endif
-
-        @if (!$preselectedEventId && !$events->count())
-            <
-            div class = "card"
-            style = "text-align:center;padding:40px;margin-top:20px;" >
-                <
-                h3 style = "color:#aaa;" > Belum Ada Acara Media Aktif < /h3> <
-                p style = "color:#666;margin-top:10px;" >
-                Buat acara media terlebih dahulu untuk mulai scan barcode. <
-                /p> <
-                br >
-                <
-                a href = "/admin/media-events/create"
-            style =
-                "display:inline-block;padding:12px 24px;background:#00e5ff;color:black;border-radius:8px;font-weight:bold;text-decoration:none;" >
-                Buat Acara Baru <
-                /a> <
-                /div>
-        @endif
-
         document.addEventListener('DOMContentLoaded', function() {
-            const nameInput = document.getElementById('nameInput');
-            if (nameInput) {
-                nameInput.focus();
-                nameInput.addEventListener('keydown', function(e) {
+            const input = document.getElementById('nameInput');
+            if (input) {
+                input.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter') {
                         e.preventDefault();
-                        this.form.submit();
+                        document.getElementById('scanForm').submit();
                     }
                 });
+                input.focus();
             }
+
+            window.addEventListener('beforeunload', function() {
+                if (html5QrCode) {
+                    html5QrCode.stop();
+                }
+            });
         });
     </script>
+
 @endsection
