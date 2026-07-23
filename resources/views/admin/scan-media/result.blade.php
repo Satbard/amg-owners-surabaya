@@ -137,6 +137,21 @@
                 <form method="POST" action="/admin/scan-media/confirm">
                     @csrf
                     <input type="hidden" name="media_registration_id" value="{{ $media->id }}">
+                    @if ($mediaEventId ?? false)
+                        <input type="hidden" name="media_event_id" value="{{ $mediaEventId }}">
+                    @else
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label style="display:block;margin-bottom:6px;color:#aaa;">Pilih Acara Media</label>
+                            <select name="media_event_id" required
+                                style="width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#1d1d1d;color:white;">
+                                <option value="">— Pilih Acara —</option>
+                                @foreach (\App\Models\MediaEvent::whereIn('status', ['upcoming', 'ongoing'])->latest()->get() as $ev)
+                                    <option value="{{ $ev->id }}">{{ $ev->title }}
+                                        ({{ $ev->event_date->format('d M') }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
 
                     <button type="submit"
                         style="

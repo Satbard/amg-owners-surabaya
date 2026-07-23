@@ -1,6 +1,21 @@
 @extends('layouts.admin')
 
 @section('content')
+
+    @if ($preselectedEventId)
+        @php $preselectedEvent = \App\Models\MediaEvent::find($preselectedEventId); @endphp
+        @if ($preselectedEvent)
+            <div
+                style="background:#1565c0;padding:12px 16px;border-radius:8px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+                <span>📌 Mode scan untuk acara: <strong>{{ $preselectedEvent->title }}</strong></span>
+                <a href="/admin/media-events/{{ $preselectedEvent->id }}"
+                    style="color:white;text-decoration:underline;font-size:14px;">
+                    Kembali ke acara →
+                </a>
+            </div>
+        @endif
+    @endif
+
     <h1 style="margin-bottom:10px;">Scan Barcode Media</h1>
 
     <p style="color:#aaa;margin-bottom:30px;">
@@ -29,6 +44,12 @@
             margin-bottom:20px;
         ">
             {{ session('error') }}
+        </div>
+    @endif
+
+    @if (session('warning'))
+        <div style="background:#f9a825;color:black;padding:12px 16px;border-radius:8px;margin-bottom:20px;">
+            {{ session('warning') }}
         </div>
     @endif
 
@@ -89,6 +110,10 @@
 
             @csrf
 
+            @if ($preselectedEventId)
+                <input type="hidden" name="media_event_id" value="{{ $preselectedEventId }}">
+            @endif
+
             <div style="display:flex;gap:10px;">
 
                 <input type="text" name="name" id="nameInput" placeholder="Ketik nama media atau nama lengkap..."
@@ -136,6 +161,10 @@
         <form method="POST" action="/admin/scan-media/lookup">
 
             @csrf
+
+            @if ($preselectedEventId)
+                <input type="hidden" name="media_event_id" value="{{ $preselectedEventId }}">
+            @endif
 
             <div style="display:flex;gap:10px;">
 
@@ -433,6 +462,52 @@
             document.getElementById('scannerLoading').style.display = 'none';
             document.getElementById('scanResult').style.display = 'none';
         }
+
+        {{-- Quick Access: Active Events --}}
+        @if (!$preselectedEventId && $events->count())
+            <
+            div class = "card"
+            style = "margin-top:20px;" >
+                <
+                h3 style = "margin-bottom:15px;" > Acara Media Aktif < /h3> <
+                p style = "color:#aaa;font-size:14px;margin-bottom:15px;" >
+                Atau buka halaman scan untuk acara tertentu:
+                <
+                /p> <
+                div style = "display:flex;flex-wrap:wrap;gap:10px;" >
+                @foreach ($events as $event)
+                    <
+                    a href = "/admin/scan-media?media_event_id={{ $event->id }}"
+                    style =
+                        "padding:10px 16px;background:#1d1d1d;border:1px solid #333;border-radius:8px;color:white;text-decoration:none;" >
+                        {{ $event->title }} <
+                        span style = "color:#aaa;font-size:13px;" >
+                        ({{ $event->event_date->format('d M') }}) <
+                        /span> <
+                        /a>
+                @endforeach <
+                /div> <
+                /div>
+        @endif
+
+        @if (!$preselectedEventId && !$events->count())
+            <
+            div class = "card"
+            style = "text-align:center;padding:40px;margin-top:20px;" >
+                <
+                h3 style = "color:#aaa;" > Belum Ada Acara Media Aktif < /h3> <
+                p style = "color:#666;margin-top:10px;" >
+                Buat acara media terlebih dahulu untuk mulai scan barcode. <
+                /p> <
+                br >
+                <
+                a href = "/admin/media-events/create"
+            style =
+                "display:inline-block;padding:12px 24px;background:#00e5ff;color:black;border-radius:8px;font-weight:bold;text-decoration:none;" >
+                Buat Acara Baru <
+                /a> <
+                /div>
+        @endif
 
         document.addEventListener('DOMContentLoaded', function() {
             const nameInput = document.getElementById('nameInput');

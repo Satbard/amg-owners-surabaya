@@ -160,6 +160,10 @@
                 Pendaftaran Media
             </a>
 
+            <a href="/admin/media-events">
+                Acara Media
+            </a>
+
             <a href="/admin/events">
                 Acara
             </a>

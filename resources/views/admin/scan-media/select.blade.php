@@ -64,6 +64,9 @@
                         <form method="POST" action="/admin/scan-media/confirm">
                             @csrf
                             <input type="hidden" name="media_registration_id" value="{{ $item->id }}">
+                            @if ($eventId ?? false)
+                                <input type="hidden" name="media_event_id" value="{{ $eventId }}">
+                            @endif
                             <button type="submit"
                                 style="
                                 padding:8px 16px;

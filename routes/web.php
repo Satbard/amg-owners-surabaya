@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\HomepageContentController;
+use App\Http\Controllers\Admin\MediaEventController;
 use App\Http\Controllers\Admin\MediaRegistrationController as AdminMediaRegistrationController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\ScanController;
@@ -184,6 +185,15 @@ Route::prefix('admin')->group(function () {
         Route::get('/scan-media', [ScanMediaController::class, 'index']);
         Route::post('/scan-media/lookup', [ScanMediaController::class, 'lookup']);
         Route::post('/scan-media/confirm', [ScanMediaController::class, 'confirm']);
+
+        // Media Events
+        Route::get('/media-events', [MediaEventController::class, 'index']);
+        Route::get('/media-events/create', [MediaEventController::class, 'create']);
+        Route::post('/media-events', [MediaEventController::class, 'store']);
+        Route::get('/media-events/{mediaEvent}', [MediaEventController::class, 'show']);
+        Route::get('/media-events/{mediaEvent}/edit', [MediaEventController::class, 'edit']);
+        Route::put('/media-events/{mediaEvent}', [MediaEventController::class, 'update']);
+        Route::delete('/media-events/{mediaEvent}', [MediaEventController::class, 'destroy']);
 
         // Content
         Route::get('/content', [
