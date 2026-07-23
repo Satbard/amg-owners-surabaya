@@ -123,7 +123,8 @@
                     {{ $registration->barcode_token }}
                 </div>
                 <div style="margin-top:15px;background:#ffffff;display:inline-block;padding:10px;border-radius:4px;">
-                    <img src="{{ $barcodeCid }}" alt="Barcode {{ $registration->barcode_token }}"
+                    <img src="data:image/png;base64,{{ $barcodeBase64 }}"
+                        alt="Barcode {{ $registration->barcode_token }}"
                         style="max-width:280px;width:100%;height:auto;display:block;background:#ffffff;">
                 </div>
             </div>
