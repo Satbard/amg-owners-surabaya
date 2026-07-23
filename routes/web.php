@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\HomepageContentController;
+use App\Http\Controllers\Admin\MediaAttendanceController;
 use App\Http\Controllers\Admin\MediaEventController;
 use App\Http\Controllers\Admin\MediaRegistrationController as AdminMediaRegistrationController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
@@ -194,6 +195,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/media-events/{mediaEvent}/edit', [MediaEventController::class, 'edit']);
         Route::put('/media-events/{mediaEvent}', [MediaEventController::class, 'update']);
         Route::delete('/media-events/{mediaEvent}', [MediaEventController::class, 'destroy']);
+        Route::put('/media-events/{mediaEvent}/attendance/{mediaAttendance}', [MediaAttendanceController::class, 'update']);
 
         // Content
         Route::get('/content', [

@@ -73,6 +73,8 @@
                                 <th style="padding:10px 12px;text-align:left;font-size:13px;color:#aaa;">Nama</th>
                                 <th style="padding:10px 12px;text-align:left;font-size:13px;color:#aaa;">Media</th>
                                 <th style="padding:10px 12px;text-align:center;font-size:13px;color:#aaa;">Kehadiran</th>
+                                <th style="padding:10px 12px;text-align:center;font-size:13px;color:#aaa;">Waktu Scan</th>
+                                <th style="padding:10px 12px;text-align:center;font-size:13px;color:#aaa;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,6 +95,23 @@
                                                 ❌ Tidak Hadir
                                             </span>
                                         @endif
+                                    </td>
+                                    <td style="padding:10px 12px;text-align:center;color:#aaa;font-size:13px;">
+                                        {{ $att->scanned_at ? $att->scanned_at->format('d M H:i') : '-' }}
+                                    </td>
+                                    <td style="padding:10px 12px;text-align:center;">
+                                        <form method="POST"
+                                            action="/admin/media-events/{{ $mediaEvent->id }}/attendance/{{ $att->id }}"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="status"
+                                                value="{{ $att->status == 'hadir' ? 'tidak_hadir' : 'hadir' }}">
+                                            <button type="submit"
+                                                style="padding:6px 12px;background:{{ $att->status == 'hadir' ? '#555' : '#2e7d32' }};color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">
+                                                {{ $att->status == 'hadir' ? 'Tandai Tidak Hadir' : 'Tandai Hadir' }}
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
