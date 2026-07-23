@@ -5,9 +5,6 @@ namespace App\Mail;
 use App\Models\MediaRegistration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Attachment;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 
@@ -17,37 +14,12 @@ class MediaBarcodeMail extends Mailable
 
     public MediaRegistration $registration;
 
-    public string $barcodeCid;
-
     /**
      * Create a new message instance.
      */
     public function __construct(MediaRegistration $registration)
     {
         $this->registration = $registration;
-    }
-
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Barcode Media Registration – '.$this->registration->media_name,
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'emails.media-barcode',
-            with: [
-                'barcodeCid' => $this->barcodeCid,
-            ],
-        );
     }
 
     /**
@@ -79,17 +51,13 @@ class MediaBarcodeMail extends Mailable
         imagedestroy($barcodeImg);
         imagedestroy($canvas);
 
-        // Embed as inline attachment
-        $this->barcodeCid = $this->embedData($pngData, 'barcode.png', 'image/png');
+        // Embed as inline attachment and get CID
+        $barcodeCid = $this->embedData($pngData, 'barcode.png', 'image/png');
 
-        return $this;
-    }
-
-    /**
-     * Get the attachments for the message.
-     */
-    public function attachments(): array
-    {
-        return [];
+        return $this->view('emails.media-barcode')
+            ->subject('Barcode Media Registration – '.$this->registration->media_name)
+            ->with([
+                'barcodeCid' => $barcodeCid,
+            ]);
     }
 }
