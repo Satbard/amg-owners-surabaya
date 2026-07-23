@@ -148,7 +148,7 @@
                         text-decoration:none;
                         font-weight:bold;
                     ">
-                        Media Login
+                        Request Ulang Barcode
                     </a>
 
                     <button onclick="document.getElementById('barcodeModal').style.display='none'"
