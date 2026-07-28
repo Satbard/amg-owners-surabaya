@@ -129,72 +129,54 @@
 
             </div>
 
-            {{-- Barcode Card --}}
+            {{-- ID Card Section --}}
             @if ($registration->barcode_token)
                 <div class="card" style="margin-bottom:20px;text-align:center;">
 
                     <h2 style="color:#00e5ff;margin-bottom:15px;">
-                        Barcode Media {{ $registration->media_name }}
+                        ID Card Pass Access
                     </h2>
 
-                    @if ($barcodeSrc)
-                        <div
-                            style="
-                            background:white;
-                            border-radius:8px;
-                            padding:20px;
-                            display:inline-block;
-                        ">
-                            <img src="{{ $barcodeSrc }}" alt="Barcode {{ $registration->barcode_token }}"
-                                style="max-width:280px;width:100%;height:auto;display:block;">
-                        </div>
-                    @else
-                        <div
-                            style="
-                            padding:30px 20px;
-                            background:#1d1d1d;
-                            border-radius:10px;
-                            border:1px dashed #444;
-                        ">
-                            <span style="font-size:40px;display:block;margin-bottom:10px;">📱</span>
-                            <p style="color:#888;font-size:13px;">
-                                Barcode tidak dapat ditampilkan.
-                            </p>
-                        </div>
-                    @endif
-
-                    <p
+                    <div
                         style="
-                        margin-top:10px;
-                        font-size:18px;
-                        letter-spacing:3px;
-                        color:#00e5ff;
-                        font-weight:bold;
+                        background:#1d1d1d;
+                        border-radius:10px;
+                        padding:30px 20px;
+                        border:1px solid #333;
                     ">
-                        {{ $registration->barcode_token }}
-                    </p>
+                        <span style="font-size:50px;display:block;margin-bottom:10px;">🪪</span>
+                        <p style="color:#ccc;font-size:14px;margin-bottom:5px;">
+                            ID Card Pass Access
+                        </p>
+                        <p style="color:#00e5ff;font-size:16px;font-weight:bold;">
+                            {{ $registration->media_name }}
+                        </p>
+                        <p style="color:#888;font-size:13px;margin-top:10px;">
+                            {{ $registration->full_name }}
+                        </p>
+                    </div>
 
                     @if ($registration->status == 'Approved')
-                        <p style="color:#4caf50;font-size:13px;margin-top:5px;">
-                            ✅ Barcode aktif — dapat digunakan untuk absensi
+                        <p style="color:#4caf50;font-size:13px;margin-top:10px;">
+                            ✅ ID Card aktif — dapat digunakan untuk akses masuk acara
                         </p>
                     @else
-                        <p style="color:#f9a825;font-size:13px;margin-top:5px;">
-                            ⏳ Barcode akan aktif setelah pendaftaran disetujui admin
+                        <p style="color:#f9a825;font-size:13px;margin-top:10px;">
+                            ⏳ ID Card akan aktif setelah pendaftaran disetujui admin
                         </p>
                     @endif
 
                 </div>
 
-                {{-- Resend Barcode --}}
+                {{-- Resend ID Card --}}
                 <div class="card" style="text-align:center;">
 
                     <h2 style="color:#00e5ff;margin-bottom:15px;">
-                        Kirim Ulang Barcode
+                        Kirim Ulang ID Card
                     </h2>
 
                     <p style="color:#aaa;font-size:14px;margin-bottom:15px;">
-                        Jika Anda tidak menerima email barcode, klik tombol di bawah untuk mengirim ulang.
+                        Jika Anda tidak menerima email ID Card, klik tombol di bawah untuk mengirim ulang.
                     </p>
 
                     <form method="POST" action="/media-dashboard/resend-barcode">
@@ -210,7 +192,7 @@
                             cursor:pointer;
                             font-size:15px;
                         ">
-                            📧 Kirim Ulang Barcode ke Email
+                            📧 Kirim Ulang ID Card ke Email
                         </button>
                     </form>
 

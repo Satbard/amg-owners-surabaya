@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Registration Barcode</title>
+    <title>ID Card Pass Access</title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -38,33 +38,6 @@
         .body {
             padding: 30px;
             color: #333;
-        }
-
-        .barcode-section {
-            text-align: center;
-            background: #f9f9f9;
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-
-        .barcode-section img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .barcode-token {
-            font-size: 28px;
-            letter-spacing: 5px;
-            font-weight: bold;
-            color: #111;
-            margin-top: 10px;
-        }
-
-        .barcode-label {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 5px;
         }
 
         .info-table {
@@ -110,22 +83,18 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Barcode Media {{ $registration->media_name }}</h1>
+            <h1>ID Card Pass Access – {{ $registration->media_name }}</h1>
         </div>
 
         <div class="body">
             <p>Halo <strong>{{ $registration->full_name }}</strong>,</p>
-            <p>Terima kasih telah mendaftarkan media Anda. Berikut adalah barcode unik untuk registrasi media Anda:</p>
+            <p>Terima kasih telah mendaftarkan media Anda. Berikut adalah ID Card Pass Access untuk registrasi media
+                Anda:</p>
 
-            <div class="barcode-section" style="background:#ffffff;">
-                <div class="barcode-label" style="color:#888;">Gunakan kode berikut untuk absensi</div>
-                <div class="barcode-token" style="font-size:32px;letter-spacing:8px;color:#111;">
-                    {{ $registration->barcode_token }}
-                </div>
-                <p style="color:#666;font-size:13px;margin-top:15px;">
-                    File gambar barcode terlampir sebagai attachment di email ini.
-                </p>
-            </div>
+            <p style="background:#f0f0f0;padding:15px;border-radius:8px;text-align:center;font-size:14px;color:#555;">
+                📎 File ID Card (JPG) terlampir sebagai attachment di email ini.
+                Silakan download dan cetak untuk digunakan sebagai akses masuk acara.
+            </p>
 
             <table class="info-table">
                 <tr>
@@ -151,12 +120,6 @@
                     </td>
                 </tr>
             </table>
-
-            <p style="margin-top:20px;font-size:13px;color:#888;">
-                <strong>Catatan:</strong> Barcode ini hanya dapat digunakan untuk absensi setelah status pendaftaran
-                Anda disetujui oleh admin. Anda dapat mengecek status terbaru melalui halaman login media di website
-                kami.
-            </p>
         </div>
 
         <div class="footer">

@@ -116,7 +116,7 @@
                 </h2>
 
                 <p style="color:#ccc;font-size:15px;line-height:1.7;margin-bottom:5px;">
-                    Barcode unik media Anda telah dikirim ke
+                    ID Card Pass Access Anda telah dikirim ke
                 </p>
 
                 <p style="color:#00e5ff;font-weight:bold;font-size:16px;margin-bottom:20px;">
@@ -134,7 +134,7 @@
                     line-height:1.6;
                 ">
                     <p>📧 Jika tidak menerima email, silakan menuju ke halaman
-                        <strong>Request Barcode Media</strong> untuk mengirim ulang barcode.
+                        <strong>Request ID Card</strong> untuk mengirim ulang ID Card.
                     </p>
                 </div>
 
@@ -148,7 +148,7 @@
                         text-decoration:none;
                         font-weight:bold;
                     ">
-                        Request Ulang Barcode
+                        Request Ulang ID Card
                     </a>
 
                     <button onclick="document.getElementById('barcodeModal').style.display='none'"
