@@ -129,45 +129,7 @@
 
             </div>
 
-            {{-- ID Card Section --}}
             @if ($registration->barcode_token)
-                <div class="card" style="margin-bottom:20px;text-align:center;">
-
-                    <h2 style="color:#00e5ff;margin-bottom:15px;">
-                        ID Card Pass Access
-                    </h2>
-
-                    <div
-                        style="
-                        background:#1d1d1d;
-                        border-radius:10px;
-                        padding:30px 20px;
-                        border:1px solid #333;
-                    ">
-                        <span style="font-size:50px;display:block;margin-bottom:10px;">🪪</span>
-                        <p style="color:#ccc;font-size:14px;margin-bottom:5px;">
-                            ID Card Pass Access
-                        </p>
-                        <p style="color:#00e5ff;font-size:16px;font-weight:bold;">
-                            {{ $registration->media_name }}
-                        </p>
-                        <p style="color:#888;font-size:13px;margin-top:10px;">
-                            {{ $registration->full_name }}
-                        </p>
-                    </div>
-
-                    @if ($registration->status == 'Approved')
-                        <p style="color:#4caf50;font-size:13px;margin-top:10px;">
-                            ✅ ID Card aktif — dapat digunakan untuk akses masuk acara
-                        </p>
-                    @else
-                        <p style="color:#f9a825;font-size:13px;margin-top:10px;">
-                            ⏳ ID Card akan aktif setelah pendaftaran disetujui admin
-                        </p>
-                    @endif
-
-                </div>
-
                 {{-- Resend ID Card --}}
                 <div class="card" style="text-align:center;">
 
