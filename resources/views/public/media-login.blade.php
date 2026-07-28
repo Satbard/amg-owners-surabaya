@@ -28,7 +28,7 @@
                 color:#00e5ff;
                 font-size:24px;
             ">
-                Barcode Media
+                ID Card
             </h1>
 
             <p
