@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class MediaBarcodeMail extends Mailable
 {
@@ -37,7 +38,7 @@ class MediaBarcodeMail extends Mailable
 
     public function attachments(): array
     {
-        $path = public_path('images/ID CARD PASS ACCESS opsi.jpeg');
+        $path = Storage::disk('public')->path('images/ID CARD PASS ACCESS opsi.jpeg');
 
         if (! file_exists($path)) {
             return [];
