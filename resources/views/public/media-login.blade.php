@@ -38,7 +38,8 @@
                 color:#bbb;
                 font-size:14px;
             ">
-                Masukkan email yang digunakan saat pendaftaran untuk pengiriman ulang barcode media
+                Masukkan email yang digunakan saat pendaftaran untuk pengiriman ulang ID Card. Pastikan email yang
+                dimasukkan sudah benar.
             </p>
 
             @if (session('success'))
