@@ -54,7 +54,7 @@
                     line-height:1.6;
                 ">
                     📧 {{ session('success') }} Silahkan
-                    periksa folder <strong>Spam</strong> atau klik
+                    periksa <strong>Email</strong> atau klik
                     <strong>Kirim Ulang OTP</strong> di bawah jika belum menerima.
                 </div>
             @endif
