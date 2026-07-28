@@ -93,7 +93,7 @@
 
             <p style="background:#f0f0f0;padding:15px;border-radius:8px;text-align:center;font-size:14px;color:#555;">
                 📎 File ID Card (JPG) terlampir sebagai attachment di email ini.
-                Silakan download dan cetak untuk digunakan sebagai akses masuk acara.
+                Silakan download untuk digunakan sebagai akses masuk acara.
             </p>
 
             <table class="info-table">
