@@ -7,11 +7,21 @@ use App\Models\HomepageContent;
 use App\Models\MediaRegistration;
 use App\Services\BarcodeService;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class MediaRegistrationController extends Controller
+class MediaRegistrationController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            // Limit to 3 submissions per IP per minute to prevent abuse
+            new Middleware('throttle:3,1', only: ['store']),
+        ];
+    }
+
     public function create()
     {
         $content = HomepageContent::first();
@@ -21,6 +31,19 @@ class MediaRegistrationController extends Controller
 
     public function store(Request $request)
     {
+        // Prevent duplicate: check if same email+phone already submitted within last 60 seconds
+        $existing = MediaRegistration::where('email', $request->email)
+            ->where('phone', $request->phone)
+            ->where('created_at', '>=', now()->subSeconds(60))
+            ->first();
+
+        if ($existing) {
+            return redirect('/')
+                ->with('success', 'Pendaftaran media berhasil dikirim.')
+                ->with('barcode_sent', true)
+                ->with('media_email', $existing->email);
+        }
+
         $validated = $request->validate([
 
             // Personal Information

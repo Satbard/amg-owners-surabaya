@@ -50,7 +50,7 @@
                 AMG Owners Surabaya by Hartono Group
             </p>
 
-            <form method="POST" action="/register-media">
+            <form id="media-registration-form" method="POST" action="/register-media">
 
                 @csrf
 
@@ -309,7 +309,7 @@
 
                 <br><br>
 
-                <button type="submit" class="btn-primary"
+                <button type="submit" id="submit-btn" class="btn-primary"
                     style="
                     width:100%;
                     border:none;
@@ -320,6 +320,32 @@
                 </button>
 
             </form>
+
+            <script>
+                (function() {
+                    const form = document.getElementById('media-registration-form');
+                    const btn = document.getElementById('submit-btn');
+
+                    if (form && btn) {
+                        form.addEventListener('submit', function(e) {
+                            // Prevent double submission
+                            if (btn.disabled) {
+                                e.preventDefault();
+                                return;
+                            }
+
+                            // Disable button immediately
+                            btn.disabled = true;
+                            btn.style.opacity = '0.6';
+                            btn.style.cursor = 'not-allowed';
+                            btn.textContent = 'Mengirim...';
+
+                            // Store original text so if user navigates back it resets
+                            btn.dataset.originalText = 'Kirim Pendaftaran Media';
+                        });
+                    }
+                })();
+            </script>
 
         </div>
 
