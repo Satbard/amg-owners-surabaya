@@ -114,16 +114,6 @@
                 </button>
             </form>
 
-            <p
-                style="
-                text-align:center;
-                margin-top:20px;
-                font-size:13px;
-                color:#888;
-            ">
-                Belum mendaftar? <a href="/register-media" style="color:#00e5ff;">Daftar di sini</a>
-            </p>
-
         </div>
 
     </div>

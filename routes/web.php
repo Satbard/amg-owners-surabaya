@@ -14,7 +14,6 @@ use App\Http\Controllers\Admin\ScanController;
 use App\Http\Controllers\Admin\ScanMediaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaAuthController;
-use App\Http\Controllers\MediaRegistrationController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,15 +29,9 @@ Route::post('/register', [
     'store',
 ]);
 
-Route::get('/register-media', [
-    MediaRegistrationController::class,
-    'create',
-]);
-
-Route::post('/register-media', [
-    MediaRegistrationController::class,
-    'store',
-]);
+// Public media registration is CLOSED — redirect visitors to the home page.
+Route::get('/register-media', fn () => redirect('/'));
+Route::post('/register-media', fn () => redirect('/'));
 
 // Media Auth
 Route::get('/media-login', [MediaAuthController::class, 'showLoginForm']);
