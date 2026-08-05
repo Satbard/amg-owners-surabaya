@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\GuestbookController;
+use App\Http\Controllers\Admin\GuestbookEventController;
 use App\Http\Controllers\Admin\HomepageContentController;
 use App\Http\Controllers\Admin\MediaAttendanceController;
 use App\Http\Controllers\Admin\MediaEventController;
@@ -203,5 +205,24 @@ Route::prefix('admin')->group(function () {
         Route::get('/activity-logs', [
             ActivityLogController::class, 'index',
         ]);
+
+        // Guestbook (standalone module)
+        Route::get('/guestbooks', [GuestbookEventController::class, 'index']);
+        Route::get('/guestbooks/create', [GuestbookEventController::class, 'create']);
+        Route::post('/guestbooks', [GuestbookEventController::class, 'store']);
+        Route::get('/guestbooks/{guestbookEvent}', [GuestbookEventController::class, 'show']);
+        Route::get('/guestbooks/{guestbookEvent}/edit', [GuestbookEventController::class, 'edit']);
+        Route::put('/guestbooks/{guestbookEvent}', [GuestbookEventController::class, 'update']);
+        Route::delete('/guestbooks/{guestbookEvent}', [GuestbookEventController::class, 'destroy']);
+
+        Route::get('/guestbooks/{guestbookEvent}/guestbooks/create', [GuestbookController::class, 'create']);
+        Route::post('/guestbooks/{guestbookEvent}/guestbooks', [GuestbookController::class, 'store']);
+        Route::get('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}', [GuestbookController::class, 'show']);
+        Route::get('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}/edit', [GuestbookController::class, 'edit']);
+        Route::put('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}', [GuestbookController::class, 'update']);
+        Route::delete('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}', [GuestbookController::class, 'destroy']);
+        Route::post('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}/entries', [GuestbookController::class, 'storeEntry']);
+        Route::delete('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}/entries/{entry}', [GuestbookController::class, 'destroyEntry']);
+        Route::get('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}/export', [GuestbookController::class, 'export']);
     });
 });

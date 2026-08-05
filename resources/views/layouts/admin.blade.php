@@ -168,6 +168,10 @@
                 Acara Media
             </a>
 
+            <a href="/admin/guestbooks">
+                Guestbook
+            </a>
+
             <a href="/admin/scan">
                 Scan Member
             </a>
