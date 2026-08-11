@@ -31,6 +31,11 @@ class AuthController extends Controller
                 'ip_address' => $request->ip(),
             ]);
 
+            // Panitia hanya bisa melihat data pendaftaran — arahkan langsung ke halaman tersebut.
+            if (auth()->user()->role === 'panitia') {
+                return redirect('/admin/registrations');
+            }
+
             return redirect()->intended('/admin');
         }
 

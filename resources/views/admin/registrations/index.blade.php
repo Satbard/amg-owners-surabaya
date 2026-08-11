@@ -2,53 +2,59 @@
 
 @section('content')
 
+    @php
+        $canManage = in_array(auth()->user()->role, ['admin', 'super_admin']);
+    @endphp
+
     <h1 style="margin-bottom:20px;">
         Data Pendaftaran
     </h1>
 
-    <div style="
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-bottom:20px;
-    ">
-
-        <a href="/admin/registrations-export"
-            style="
-        padding:10px 18px;
-        background:#00e5ff;
-        color:black;
-        border-radius:8px;
-        font-weight:bold;
-        text-decoration:none;
+    @if ($canManage)
+        <div style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
+        margin-bottom:20px;
         ">
-            Export Excel
-        </a>
 
-        <a href="/admin/registrations-export-barcodes"
-            style="
-        padding:10px 18px;
-        background:#7c4dff;
-        color:white;
-        border-radius:8px;
-        font-weight:bold;
-        text-decoration:none;
-        ">
-            📷 Export Barcode
-        </a>
+            <a href="/admin/registrations-export"
+                style="
+            padding:10px 18px;
+            background:#00e5ff;
+            color:black;
+            border-radius:8px;
+            font-weight:bold;
+            text-decoration:none;
+            ">
+                Export Excel
+            </a>
 
-        <a href="/admin/registrations-trash"
-            style="
-        padding:10px 18px;
-        background:#333;
-        color:white;
-        border-radius:8px;
-        text-decoration:none;
-        ">
-            Trash Bin
-        </a>
+            <a href="/admin/registrations-export-barcodes"
+                style="
+            padding:10px 18px;
+            background:#7c4dff;
+            color:white;
+            border-radius:8px;
+            font-weight:bold;
+            text-decoration:none;
+            ">
+                📷 Export Barcode
+            </a>
 
-    </div>
+            <a href="/admin/registrations-trash"
+                style="
+            padding:10px 18px;
+            background:#333;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            ">
+                Trash Bin
+            </a>
+
+        </div>
+    @endif
 
     {{-- Filter Bar --}}
     <div class="card" style="margin-bottom:20px;">
@@ -124,34 +130,36 @@
     </div>
 
     @if ($registrations->count())
-        {{-- Batch Action Bar --}}
-        <div class="card" style="margin-bottom:20px;padding:15px 20px;">
-            <form method="POST" action="/admin/registrations/batch-update" id="batchForm">
-                @csrf
-                <input type="hidden" name="action" id="batchAction">
+        @if ($canManage)
+            {{-- Batch Action Bar --}}
+            <div class="card" style="margin-bottom:20px;padding:15px 20px;">
+                <form method="POST" action="/admin/registrations/batch-update" id="batchForm">
+                    @csrf
+                    <input type="hidden" name="action" id="batchAction">
 
-                <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
-                    <span style="color:#aaa;font-size:14px;margin-right:5px;">
-                        ☑ <span id="selectedCount">0</span> terpilih
-                    </span>
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+                        <span style="color:#aaa;font-size:14px;margin-right:5px;">
+                            ☑ <span id="selectedCount">0</span> terpilih
+                        </span>
 
-                    <button type="button" class="batch-action-btn" data-action="approve"
-                        style="padding:8px 16px;background:#2e7d32;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
-                        ✓ Setujui Terpilih
-                    </button>
+                        <button type="button" class="batch-action-btn" data-action="approve"
+                            style="padding:8px 16px;background:#2e7d32;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
+                            ✓ Setujui Terpilih
+                        </button>
 
-                    <button type="button" class="batch-action-btn" data-action="reject"
-                        style="padding:8px 16px;background:#c62828;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
-                        ✕ Tolak Terpilih
-                    </button>
+                        <button type="button" class="batch-action-btn" data-action="reject"
+                            style="padding:8px 16px;background:#c62828;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
+                            ✕ Tolak Terpilih
+                        </button>
 
-                    <button type="button" class="batch-action-btn" data-action="pending"
-                        style="padding:8px 16px;background:#f9a825;color:black;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
-                        ⏳ Pending-kan Terpilih
-                    </button>
-                </div>
-            </form>
-        </div>
+                        <button type="button" class="batch-action-btn" data-action="pending"
+                            style="padding:8px 16px;background:#f9a825;color:black;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
+                            ⏳ Pending-kan Terpilih
+                        </button>
+                    </div>
+                </form>
+            </div>
+        @endif
 
         <div class="card">
 
@@ -167,9 +175,11 @@
 
                         <tr style="background:#1d1d1d;">
 
-                            <th style="padding:12px;width:40px;">
-                                <input type="checkbox" id="selectAll" style="width:18px;height:18px;cursor:pointer;">
-                            </th>
+                            @if ($canManage)
+                                <th style="padding:12px;width:40px;">
+                                    <input type="checkbox" id="selectAll" style="width:18px;height:18px;cursor:pointer;">
+                                </th>
+                            @endif
                             <th style="padding:12px;">ID</th>
                             <th style="padding:12px;">No. Member</th>
                             <th style="padding:12px;">Nama</th>
@@ -187,10 +197,12 @@
                         @foreach ($registrations as $registration)
                             <tr style="border-top:1px solid #222;">
 
-                                <td style="padding:12px;text-align:center;">
-                                    <input type="checkbox" name="ids[]" value="{{ $registration->id }}"
-                                        class="row-checkbox" style="width:18px;height:18px;cursor:pointer;">
-                                </td>
+                                @if ($canManage)
+                                    <td style="padding:12px;text-align:center;">
+                                        <input type="checkbox" name="ids[]" value="{{ $registration->id }}"
+                                            class="row-checkbox" style="width:18px;height:18px;cursor:pointer;">
+                                    </td>
+                                @endif
 
                                 <td style="padding:12px;">
                                     {{ $registration->id }}
@@ -266,36 +278,38 @@
                                             Detail
                                         </a>
 
-                                        <a href="/admin/registrations/{{ $registration->id }}/edit"
-                                            style="
-                                padding:6px 10px;
-                                background:#555;
-                                color:white;
-                                border-radius:6px;
-                                text-decoration:none;
-                            ">
-                                            Edit
-                                        </a>
-
-                                        <form method="POST" action="/admin/registrations/{{ $registration->id }}"
-                                            style="display:inline;">
-
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button type="submit" onclick="return confirm('Hapus data ini?')"
+                                        @if ($canManage)
+                                            <a href="/admin/registrations/{{ $registration->id }}/edit"
                                                 style="
                                     padding:6px 10px;
-                                    background:#c62828;
+                                    background:#555;
                                     color:white;
-                                    border:none;
                                     border-radius:6px;
-                                    cursor:pointer;
+                                    text-decoration:none;
                                 ">
-                                                Hapus
-                                            </button>
+                                                Edit
+                                            </a>
 
-                                        </form>
+                                            <form method="POST" action="/admin/registrations/{{ $registration->id }}"
+                                                style="display:inline;">
+
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="submit" onclick="return confirm('Hapus data ini?')"
+                                                    style="
+                                        padding:6px 10px;
+                                        background:#c62828;
+                                        color:white;
+                                        border:none;
+                                        border-radius:6px;
+                                        cursor:pointer;
+                                    ">
+                                                    Hapus
+                                                </button>
+
+                                            </form>
+                                        @endif
 
                                     </div>
 
@@ -321,13 +335,21 @@
                         pageLength: 10,
 
                         order: [
-                            [1, 'desc']
+                            @if ($canManage)
+                                [1, 'desc']
+                            @else
+                                [0, 'desc']
+                            @endif
                         ],
 
-                        columnDefs: [{
-                            targets: 0,
-                            orderable: false,
-                        }],
+                        columnDefs: [
+                            @if ($canManage)
+                                {
+                                    targets: 0,
+                                    orderable: false,
+                                }
+                            @endif
+                        ],
 
                         language: {
 
@@ -359,66 +381,70 @@
 
                     });
 
-                    // Select All checkbox
-                    document.getElementById('selectAll').addEventListener('change', function() {
-                        const checkboxes = document.querySelectorAll('.row-checkbox');
-                        checkboxes.forEach(cb => cb.checked = this.checked);
-                        updateSelectedCount();
-                    });
-
-                    // Individual checkbox → update count + uncheck selectAll if any unchecked
-                    document.addEventListener('change', function(e) {
-                        if (e.target.classList.contains('row-checkbox')) {
+                    @if ($canManage)
+                        // Select All checkbox
+                        document.getElementById('selectAll').addEventListener('change', function() {
+                            const checkboxes = document.querySelectorAll('.row-checkbox');
+                            checkboxes.forEach(cb => cb.checked = this.checked);
                             updateSelectedCount();
-                            const allChecked = document.querySelectorAll('.row-checkbox:checked').length ===
-                                document.querySelectorAll('.row-checkbox').length;
-                            document.getElementById('selectAll').checked = allChecked;
-                        }
-                    });
-
-                    // Batch action buttons
-                    document.querySelectorAll('.batch-action-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const checked = document.querySelectorAll('.row-checkbox:checked');
-                            if (checked.length === 0) {
-                                alert('Pilih minimal satu data.');
-                                return;
-                            }
-                            const actionLabels = {
-                                'approve': 'menyetujui',
-                                'reject': 'menolak',
-                                'pending': 'mengubah status menjadi pending'
-                            };
-                            const action = this.dataset.action;
-                            if (!confirm(
-                                    `Yakin akan ${actionLabels[action]} ${checked.length} data terpilih?`
-                                )) {
-                                return;
-                            }
-
-                            // Remove any previously added hidden ID inputs
-                            document.querySelectorAll('#batchForm input[name="ids[]"]').forEach(el => el
-                                .remove());
-
-                            // Dynamically add hidden inputs for each checked checkbox
-                            // (checkboxes are outside the form, so they won't be submitted natively)
-                            checked.forEach(cb => {
-                                const input = document.createElement('input');
-                                input.type = 'hidden';
-                                input.name = 'ids[]';
-                                input.value = cb.value;
-                                document.getElementById('batchForm').appendChild(input);
-                            });
-
-                            document.getElementById('batchAction').value = action;
-                            document.getElementById('batchForm').submit();
                         });
-                    });
 
-                    function updateSelectedCount() {
-                        const count = document.querySelectorAll('.row-checkbox:checked').length;
-                        document.getElementById('selectedCount').textContent = count;
-                    }
+                        // Individual checkbox → update count + uncheck selectAll if any unchecked
+                        document.addEventListener('change', function(e) {
+                            if (e.target.classList.contains('row-checkbox')) {
+                                updateSelectedCount();
+                                const allChecked = document.querySelectorAll('.row-checkbox:checked')
+                                    .length ===
+                                    document.querySelectorAll('.row-checkbox').length;
+                                document.getElementById('selectAll').checked = allChecked;
+                            }
+                        });
+
+                        // Batch action buttons
+                        document.querySelectorAll('.batch-action-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const checked = document.querySelectorAll('.row-checkbox:checked');
+                                if (checked.length === 0) {
+                                    alert('Pilih minimal satu data.');
+                                    return;
+                                }
+                                const actionLabels = {
+                                    'approve': 'menyetujui',
+                                    'reject': 'menolak',
+                                    'pending': 'mengubah status menjadi pending'
+                                };
+                                const action = this.dataset.action;
+                                if (!confirm(
+                                        `Yakin akan ${actionLabels[action]} ${checked.length} data terpilih?`
+                                    )) {
+                                    return;
+                                }
+
+                                // Remove any previously added hidden ID inputs
+                                document.querySelectorAll('#batchForm input[name="ids[]"]').forEach(el =>
+                                    el
+                                    .remove());
+
+                                // Dynamically add hidden inputs for each checked checkbox
+                                // (checkboxes are outside the form, so they won't be submitted natively)
+                                checked.forEach(cb => {
+                                    const input = document.createElement('input');
+                                    input.type = 'hidden';
+                                    input.name = 'ids[]';
+                                    input.value = cb.value;
+                                    document.getElementById('batchForm').appendChild(input);
+                                });
+
+                                document.getElementById('batchAction').value = action;
+                                document.getElementById('batchForm').submit();
+                            });
+                        });
+
+                        function updateSelectedCount() {
+                            const count = document.querySelectorAll('.row-checkbox:checked').length;
+                            document.getElementById('selectedCount').textContent = count;
+                        }
+                    @endif
 
                 });
             </script>

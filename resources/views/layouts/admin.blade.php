@@ -144,59 +144,70 @@
                 AMG Admin
             </h2>
 
-            <div class="sidebar-label">Utama</div>
+            @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
+                <div class="sidebar-label">Utama</div>
 
-            <a href="/admin">
-                Dashboard
-            </a>
+                <a href="/admin">
+                    Dashboard
+                </a>
 
-            <div class="sidebar-label">Manajemen</div>
+                <div class="sidebar-label">Manajemen</div>
 
-            <a href="/admin/registrations">
-                Pendaftaran
-            </a>
+                <a href="/admin/registrations">
+                    Pendaftaran
+                </a>
 
-            <a href="/admin/media-registrations">
-                Pendaftaran Media
-            </a>
+                <a href="/admin/media-registrations">
+                    Pendaftaran Media
+                </a>
+                <a href="/admin/events">
+                    Acara
+                </a>
 
-            <a href="/admin/events">
-                Acara
-            </a>
+                <a href="/admin/media-events">
+                    Acara Media
+                </a>
 
-            <a href="/admin/media-events">
-                Acara Media
-            </a>
+                <a href="/admin/guestbooks">
+                    Guestbook
+                </a>
 
-            <a href="/admin/guestbooks">
-                Guestbook
-            </a>
+                <a href="/admin/scan">
+                    Scan Member
+                </a>
 
-            <a href="/admin/scan">
-                Scan Member
-            </a>
+                <a href="/admin/scan-media">
+                    Scan Media
+                </a>
 
-            <a href="/admin/scan-media">
-                Scan Media
-            </a>
+                <div class="sidebar-label">Lainnya</div>
 
-            <div class="sidebar-label">Lainnya</div>
+                <a href="/admin/panitia">
+                    Manajemen Panitia
+                </a>
 
-            <a href="/admin/registrations-trash">
-                Trash Bin
-            </a>
+                <a href="/admin/registrations-trash">
+                    Trash Bin
+                </a>
 
-            <a href="/admin/media-registrations-trash">
-                Trash Bin Media
-            </a>
+                <a href="/admin/media-registrations-trash">
+                    Trash Bin Media
+                </a>
 
-            <a href="/admin/activity-logs">
-                Activity Logs
-            </a>
+                <a href="/admin/activity-logs">
+                    Activity Logs
+                </a>
 
-            <a href="/admin/content">
-                Homepage CMS
-            </a>
+                <a href="/admin/content">
+                    Homepage CMS
+                </a>
+            @else
+                <div class="sidebar-label">Manajemen</div>
+
+                <a href="/admin/registrations">
+                    Pendaftaran
+                </a>
+            @endif
 
             <br>
 

@@ -188,18 +188,20 @@
 
                 <br><br><br>
 
-                <a href="/admin/registrations/{{ $registration->id }}/edit"
-                    style="
-                    display:inline-block;
-                    padding:12px 20px;
-                    background:#00e5ff;
-                    color:black;
-                    border-radius:8px;
-                    font-weight:bold;
-                    text-decoration:none;
-                ">
-                    Edit Data
-                </a>
+                @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
+                    <a href="/admin/registrations/{{ $registration->id }}/edit"
+                        style="
+                        display:inline-block;
+                        padding:12px 20px;
+                        background:#00e5ff;
+                        color:black;
+                        border-radius:8px;
+                        font-weight:bold;
+                        text-decoration:none;
+                    ">
+                        Edit Data
+                    </a>
+                @endif
 
             </div>
 

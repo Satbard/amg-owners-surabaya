@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\HomepageContentController;
 use App\Http\Controllers\Admin\MediaAttendanceController;
 use App\Http\Controllers\Admin\MediaEventController;
 use App\Http\Controllers\Admin\MediaRegistrationController as AdminMediaRegistrationController;
+use App\Http\Controllers\Admin\PanitiaController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\ScanController;
 use App\Http\Controllers\Admin\ScanMediaController;
@@ -54,14 +55,13 @@ Route::prefix('admin')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    // Routes shared by admin, super_admin, and panitia (view-only registrations).
     Route::middleware([
         'auth',
-        'role:admin,super_admin',
+        'role:admin,super_admin,panitia',
     ])->group(function () {
 
-        Route::get('/', [DashboardController::class, 'index']);
-
-        // Registrations
+        // Registrations — view only (panitia can view, not manage)
         Route::get('/registrations', [
             AdminRegistrationController::class,
             'index',
@@ -71,6 +71,16 @@ Route::prefix('admin')->group(function () {
             AdminRegistrationController::class,
             'show',
         ]);
+
+    });
+
+    // Admin-only routes
+    Route::middleware([
+        'auth',
+        'role:admin,super_admin',
+    ])->group(function () {
+
+        Route::get('/', [DashboardController::class, 'index']);
 
         Route::get('/registrations/{registration}/edit', [
             AdminRegistrationController::class,
@@ -224,5 +234,11 @@ Route::prefix('admin')->group(function () {
         Route::post('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}/entries', [GuestbookController::class, 'storeEntry']);
         Route::delete('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}/entries/{entry}', [GuestbookController::class, 'destroyEntry']);
         Route::get('/guestbooks/{guestbookEvent}/guestbooks/{guestbook}/export', [GuestbookController::class, 'export']);
+
+        // Panitia management (admin only)
+        Route::get('/panitia', [PanitiaController::class, 'index'])->name('admin.panitia.index');
+        Route::get('/panitia/create', [PanitiaController::class, 'create']);
+        Route::post('/panitia', [PanitiaController::class, 'store']);
+        Route::delete('/panitia/{user}', [PanitiaController::class, 'destroy']);
     });
 });
