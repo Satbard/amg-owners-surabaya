@@ -27,10 +27,12 @@ Route::get('/register', [
     'create',
 ]);
 
+// Throttle prevents duplicate submissions (e.g. double-click / accidental resubmit)
+// from saving more than one registration per short window.
 Route::post('/register', [
     RegistrationController::class,
     'store',
-]);
+])->middleware('throttle:3,1');
 
 // Public media registration is CLOSED — redirect visitors to the home page.
 Route::get('/register-media', fn () => redirect('/'));

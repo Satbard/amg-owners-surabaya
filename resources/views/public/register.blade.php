@@ -50,7 +50,7 @@
                 Lengkapi data diri dan kendaraan Anda
             </p>
 
-            <form method="POST" action="/register">
+            <form id="registration-form" method="POST" action="/register">
 
                 @csrf
 
@@ -244,7 +244,7 @@
 
                 <br><br>
 
-                <button type="submit" class="btn-primary"
+                <button type="submit" id="submit-btn" class="btn-primary"
                     style="
                     width:100%;
                     border:none;
@@ -255,6 +255,29 @@
                 </button>
 
             </form>
+
+            <script>
+                (function() {
+                    const form = document.getElementById('registration-form');
+                    const btn = document.getElementById('submit-btn');
+
+                    if (form && btn) {
+                        form.addEventListener('submit', function(e) {
+                            // Prevent double submission
+                            if (btn.disabled) {
+                                e.preventDefault();
+                                return;
+                            }
+
+                            // Disable button immediately
+                            btn.disabled = true;
+                            btn.style.opacity = '0.6';
+                            btn.style.cursor = 'not-allowed';
+                            btn.textContent = 'Mengirim...';
+                        });
+                    }
+                })();
+            </script>
 
         </div>
 
